@@ -1,0 +1,446 @@
+.notifications-page{
+  display:flex;
+  min-height:100vh;
+  background:#f3f4f6;
+  font-family:"Poppins",sans-serif;
+}
+
+/* ================= SIDEBAR ================= */
+
+.notifications-page .sidebar{
+  width:270px;
+
+  background:
+  linear-gradient(
+    180deg,
+    #050505,
+    #111827
+  );
+
+  padding:12px 18px 18px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  position:fixed;
+  left:0;
+  top:0;
+
+  height:100vh;
+
+  border-right:
+  1px solid rgba(255,255,255,0.06);
+}
+
+/* LOGO */
+
+.notifications-page .logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  margin-bottom:24px;
+
+  color:white;
+}
+
+.notifications-page .logo-box{
+  width:52px;
+  height:52px;
+
+  border-radius:14px;
+
+  background:#d6ad60;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:white;
+
+  font-size:24px;
+}
+
+.notifications-page .logo h2{
+  font-size:18px;
+  font-weight:700;
+}
+
+.notifications-page .logo span{
+  color:#d6ad60;
+}
+
+/* MENU */
+
+.notifications-page .menu{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.notifications-page .menu-item{
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  height:44px;
+
+  padding:0 18px;
+
+  border-radius:16px;
+
+  color:#d1d5db;
+
+  cursor:pointer;
+
+  transition:0.2s;
+
+  font-size:15px;
+  font-weight:500;
+}
+
+.notifications-page .menu-item:hover{
+  background:rgba(255,255,255,0.05);
+}
+
+.notifications-page .menu-item.active{
+  background:
+  rgba(214,173,96,0.15);
+
+  color:#d6ad60;
+}
+
+/* USER */
+
+.notifications-page .user-section{
+  border-top:
+  1px solid rgba(255,255,255,0.08);
+
+  padding-top:18px;
+}
+
+.notifications-page .user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.notifications-page .avatar{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:
+  rgba(214,173,96,0.15);
+
+  border:
+  2px solid rgba(214,173,96,0.2);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#d6ad60;
+
+  font-size:18px;
+  font-weight:700;
+}
+
+.notifications-page .user-text h4{
+  color:white;
+
+  font-size:15px;
+  font-weight:600;
+}
+
+.notifications-page .user-text p{
+  color:#9ca3af;
+
+  font-size:12px;
+}
+
+.notifications-page .logout{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  margin-top:16px;
+
+  color:#d1d5db;
+
+  cursor:pointer;
+}
+
+/* ================= MAIN ================= */
+
+.notifications-main{
+  margin-left:270px;
+
+  width:calc(100% - 270px);
+
+  min-height:100vh;
+
+  padding:28px 32px;
+
+  background:#f3f4f6;
+}
+
+/* ================= HEADER ================= */
+
+.notifications-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+
+  margin-bottom:24px;
+}
+
+.header-left h1{
+  font-size:22px;
+  font-weight:700;
+
+  color:#111827;
+
+  margin-bottom:6px;
+}
+
+.header-left p{
+  font-size:14px;
+
+  color:#6b7280;
+}
+
+/* ACTIONS */
+
+.header-actions{
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+}
+
+.new-btn{
+  height:42px;
+
+  padding:0 16px;
+
+  border-radius:999px;
+
+  border:1px solid #ead8af;
+
+  background:#fffdf7;
+
+  color:#d6ad60;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+.mark-btn{
+  height:42px;
+
+  padding:0 18px;
+
+  border-radius:14px;
+
+  border:1px solid #d1d5db;
+
+  background:#ffffff;
+
+  color:#111827;
+
+  cursor:pointer;
+
+  font-size:14px;
+  font-weight:500;
+
+  transition:0.2s;
+}
+
+.mark-btn:hover{
+  background:#f9fafb;
+}
+
+/* ================= LIST ================= */
+
+.notification-list{
+  display:flex;
+  flex-direction:column;
+
+  gap:16px;
+
+  width:100%;
+}
+
+/* ================= CARD ================= */
+
+.notification-card{
+  width:100%;
+
+  background:white;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:20px;
+
+  padding:18px 20px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+
+  transition:0.3s;
+
+  box-sizing:border-box;
+}
+
+.unread-card{
+  border:1px solid #e5e7eb;
+
+  background:#ffffff;
+}
+
+.notification-card:hover{
+  transform:none;
+
+  box-shadow:none;
+}
+
+/* ================= LEFT ================= */
+
+.notification-left{
+  display:flex;
+  align-items:flex-start;
+
+  gap:16px;
+
+  flex:1;
+}
+
+/* ================= ICON ================= */
+
+.icon-box{
+  width:54px;
+  height:54px;
+
+  border-radius:16px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+}
+
+.icon-box.success{
+  background:#dcfce7;
+  color:#16a34a;
+}
+
+.icon-box.info{
+  background:#f3e8d3;
+  color:#b98a2e;
+}
+
+.icon-box.danger{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+.icon-box.warning{
+  background:#fef3c7;
+  color:#d97706;
+}
+
+/* ================= CONTENT ================= */
+
+.notification-content{
+  flex:1;
+}
+
+.notification-content h3{
+  font-size:16px;
+  font-weight:700;
+
+  color:#111827;
+
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  margin-bottom:6px;
+}
+
+.notification-content p{
+  font-size:14px;
+
+  color:#6b7280;
+
+  line-height:1.6;
+
+  margin-bottom:8px;
+}
+
+.notification-content span{
+  font-size:13px;
+
+  color:#9ca3af;
+}
+
+/* ================= DOT ================= */
+
+.dot{
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:#d6ad60;
+}
+
+/* ================= DELETE ================= */
+
+.delete-icon{
+  color:#6b7280;
+
+  cursor:pointer;
+
+  flex-shrink:0;
+
+  transition:0.2s;
+}
+
+.delete-icon:hover{
+  color:#ef4444;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -270px;
+    transition: left 0.3s;
+    z-index: 1000;
+  }
+  .sidebar.open { left: 0; }
+  .notifications-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
+  }
+  .notifications-header { flex-direction: column; gap: 12px; }
+  .notif-card { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px; }
+}
+
+@media (max-width: 480px) {
+  .notifications-main { padding: 12px; }
+}

@@ -1,0 +1,512 @@
+.faculty-notification-page{
+  display:flex;
+  min-height:100vh;
+  background:#f3f4f6;
+  font-family:"Poppins",sans-serif;
+}
+
+/* ================= SIDEBAR ================= */
+
+.faculty-notification-page .sidebar{
+  width:270px;
+
+  background:
+  linear-gradient(
+    180deg,
+    #050505,
+    #111827
+  );
+
+  padding:12px 18px 18px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  position:fixed;
+  left:0;
+  top:0;
+
+  height:100vh;
+
+  border-right:
+  1px solid rgba(255,255,255,0.06);
+}
+
+/* LOGO */
+
+.faculty-notification-page .logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  margin-bottom:24px;
+
+  color:white;
+}
+
+.faculty-notification-page .logo-box{
+  width:52px;
+  height:52px;
+
+  border-radius:14px;
+
+  background:#d6ad60;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:white;
+
+  font-size:24px;
+}
+
+.faculty-notification-page .logo h2{
+  font-size:18px;
+  font-weight:700;
+}
+
+.faculty-notification-page .logo span{
+  color:#d6ad60;
+}
+
+/* MENU */
+
+.faculty-notification-page .menu{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.faculty-notification-page .menu-item{
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  height:44px;
+
+  padding:0 18px;
+
+  border-radius:16px;
+
+  color:#d1d5db;
+
+  cursor:pointer;
+
+  transition:0.2s;
+
+  font-size:15px;
+  font-weight:500;
+}
+
+.faculty-notification-page .menu-item:hover{
+  background:rgba(255,255,255,0.05);
+}
+
+.faculty-notification-page .menu-item.active{
+  background:
+  rgba(214,173,96,0.15);
+
+  color:#d6ad60;
+}
+
+/* USER */
+
+.faculty-notification-page .user-section{
+  border-top:
+  1px solid rgba(255,255,255,0.08);
+
+  padding-top:18px;
+}
+
+.faculty-notification-page .user{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.faculty-notification-page .avatar{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:
+  rgba(214,173,96,0.15);
+
+  border:
+  2px solid rgba(214,173,96,0.2);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#d6ad60;
+
+  font-size:18px;
+  font-weight:700;
+}
+
+.faculty-notification-page .user-text h4{
+  color:white;
+
+  font-size:15px;
+  font-weight:600;
+}
+
+.faculty-notification-page .user-text p{
+  color:#9ca3af;
+
+  font-size:12px;
+}
+
+.faculty-notification-page .logout{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  margin-top:16px;
+
+  color:#d1d5db;
+
+  cursor:pointer;
+}
+
+/* ================= MAIN ================= */
+
+.faculty-notification-page-main{
+  margin-left:270px;
+
+  width:calc(100% - 270px);
+
+  min-height:100vh;
+
+  padding:28px 32px;
+
+  background:#f3f4f6;
+
+  box-sizing:border-box;
+}
+
+/* ================= HEADER ================= */
+
+.faculty-notification-page-header{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  gap:20px;
+
+  flex-wrap:nowrap;
+
+  width:100%;
+
+  margin-bottom:24px;
+}
+
+.faculty-notification-page-left-header{
+  flex:1;
+
+  min-width:260px;
+
+  text-align:left;
+}
+
+.faculty-notification-page-left-header h1{
+  font-size:22px;
+  font-weight:700;
+
+  color:#111827;
+
+  margin:0 0 6px 0;
+
+  line-height:1.2;
+
+  text-align:left;
+}
+
+.faculty-notification-page-left-header p{
+  font-size:14px;
+
+  color:#6b7280;
+
+  line-height:1.5;
+
+  text-align:left;
+}
+
+/* ACTIONS */
+
+.faculty-notification-page-actions{
+  display:flex;
+
+  align-items:flex-start;
+  align-self:flex-start;
+  justify-content:flex-end;
+
+  gap:12px;
+
+  flex-wrap:nowrap;
+  margin-top:0;
+}
+
+.unread-count{
+  height:42px;
+
+  padding:0 16px;
+
+  border-radius:999px;
+
+  border:1px solid #ead8af;
+
+  background:#fffdf7;
+
+  color:#d6ad60;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:14px;
+  font-weight:600;
+}
+
+.mark-read-btn{
+  height:42px;
+
+  padding:0 18px;
+
+  border-radius:14px;
+
+  border:1px solid #d1d5db;
+
+  background:#ffffff;
+
+  color:#111827;
+
+  cursor:pointer;
+
+  font-size:14px;
+  font-weight:500;
+
+  transition:0.2s;
+}
+
+.mark-read-btn:hover{
+  background:#f9fafb;
+}
+
+/* ================= LIST ================= */
+
+.notification-list{
+  display:flex;
+  flex-direction:column;
+
+  gap:16px;
+
+  width:100%;
+}
+
+/* ================= CARD ================= */
+
+.notification-card{
+  width:100%;
+
+  background:white;
+
+  border:1px solid #e5e7eb;
+
+  border-radius:20px;
+
+  padding:18px 20px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  gap:18px;
+
+  transition:0.3s;
+
+  box-sizing:border-box;
+}
+
+.notification-card.unread{
+  border:1px solid #e5e7eb;
+
+  background:#ffffff;
+}
+
+.notification-card:hover{
+  transform:none;
+
+  box-shadow:none;
+}
+
+/* ================= LEFT ================= */
+
+.notification-left{
+  display:flex;
+  align-items:flex-start;
+
+  gap:16px;
+
+  flex:1;
+}
+
+/* ================= ICON ================= */
+
+.notification-icon{
+  width:52px;
+  height:52px;
+
+  border-radius:16px;
+
+  background:#f3f4f6;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#d6ad60;
+
+  flex-shrink:0;
+}
+
+/* ================= CONTENT ================= */
+
+.notification-content{
+  flex:1;
+
+  min-width:0;
+
+  text-align:left;
+}
+
+.notification-content h3{
+  font-size:15px;
+  font-weight:700;
+
+  color:#111827;
+
+  display:flex;
+  align-items:center;
+
+  gap:8px;
+
+  margin-bottom:6px;
+
+  flex-wrap:wrap;
+
+  text-align:left;
+}
+
+.notification-content p{
+  font-size:13px;
+
+  color:#6b7280;
+
+  line-height:1.6;
+
+  margin-bottom:8px;
+
+  word-break:break-word;
+
+  text-align:left;
+}
+
+.notification-content span{
+  font-size:12px;
+
+  color:#9ca3af;
+
+  display:block;
+
+  text-align:left;
+}
+
+/* ================= DOT ================= */
+
+.dot{
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:#d6ad60;
+}
+
+/* ================= DELETE ================= */
+
+.delete-btn{
+  border:none;
+
+  background:transparent;
+
+  cursor:pointer;
+
+  color:#6b7280;
+
+  flex-shrink:0;
+
+  transition:0.2s;
+}
+
+.delete-btn:hover{
+  color:#ef4444;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+  .faculty-notification-page .sidebar{
+    width:230px;
+  }
+
+  .faculty-notification-page-main{
+    margin-left:230px;
+
+    width:calc(100% - 230px);
+  }
+
+}
+
+@media(max-width:768px){
+
+  .faculty-notification-page .sidebar{
+    display:none;
+  }
+
+  .faculty-notification-page-main{
+    margin-left:0;
+
+    width:100%;
+
+    padding:20px;
+  }
+
+  .faculty-notification-page-header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .faculty-notification-page-actions{
+    width:100%;
+    justify-content:flex-start;
+    align-items:flex-start;
+    order:0;
+  }
+
+  .notification-card{
+    padding:16px;
+  }
+
+}

@@ -1,0 +1,1777 @@
+{
+  "project": "ProjectHub",
+  "baseUrl": "http://localhost:8081",
+  "generatedFrom": {
+    "mysql": "demo.sql",
+    "mongodb": "Spring @Document models; live MongoDB export was not present in the workspace"
+  },
+  "testStatus": {
+    "existingTests": [
+      "DemoApplicationTests.contextLoads()"
+    ],
+    "moduleWiseApiTests": false,
+    "testRun": "mvnw.cmd test failed locally: Cannot start maven from wrapper"
+  },
+  "sqlSamples": {
+    "admin_user": {
+      "id": 8,
+      "fullName": "Admin",
+      "email": "admin@gmail.com",
+      "role": "ADMIN",
+      "username": null,
+      "assignedSubject": null
+    },
+    "student_user": {
+      "id": 30,
+      "fullName": "siva",
+      "email": "siva062005@gmail.com",
+      "role": "STUDENT",
+      "username": null,
+      "assignedSubject": null
+    },
+    "faculty_user": {
+      "id": 38,
+      "fullName": "John Doe",
+      "email": "faculty1@demo.com",
+      "role": "FACULTY",
+      "username": null,
+      "assignedSubject": "Computer Science"
+    },
+    "student_profile": {
+      "id": 2,
+      "department": "ai/ds",
+      "studentCode": "STU-S157",
+      "section": null,
+      "enrollmentYear": null,
+      "year": "2024",
+      "githubUrl": "https://github.com/testuser",
+      "linkedinUrl": "https://linkedin.com/in/testuser",
+      "leetcodeUrl": "https://leetcode.com/testuser",
+      "hackerrankUrl": "https://hackerrank.com/testuser",
+      "portfolioUrl": "https://testuser.dev",
+      "faculty": {
+        "id": 2,
+        "department": "CSE",
+        "specialization": "Artificial Intelligence"
+      },
+      "user": {
+        "id": 30,
+        "fullName": "siva",
+        "email": "siva062005@gmail.com",
+        "role": "STUDENT"
+      }
+    },
+    "faculty_profile": {
+      "id": 2,
+      "department": "CSE",
+      "specialization": "Artificial Intelligence",
+      "facultyCode": null,
+      "section": null,
+      "joiningYear": null,
+      "user": {
+        "id": 38,
+        "fullName": "John Doe",
+        "email": "faculty1@demo.com",
+        "role": "FACULTY"
+      }
+    },
+    "admin_settings": {
+      "id": 1,
+      "submissionDeadline": "30-05-2026",
+      "maxResubmissions": 3,
+      "maxFileSize": 25,
+      "allowedFileTypes": null
+    },
+    "audit_log": {
+      "id": 11,
+      "actionTitle": "User Created",
+      "description": "Created new user: priyasri",
+      "performedBy": {
+        "id": 43,
+        "fullName": "priyasri"
+      },
+      "createdAt": "2026-06-01T15:54:03"
+    }
+  },
+  "mongoSamples": {
+    "project": {
+      "id": "665f10b2e6a7c1f0a91c0001",
+      "title": "AI Student Project Hub",
+      "abstractText": "A portal for submitting and reviewing student projects.",
+      "technology": "React, Spring Boot, MongoDB",
+      "status": "PENDING",
+      "feedback": "",
+      "grade": "",
+      "studentId": 2,
+      "studentName": "siva",
+      "facultyId": 2,
+      "facultyName": "John Doe",
+      "githubUrl": "https://github.com/testuser/projecthub",
+      "linkedinUrl": "https://linkedin.com/in/testuser",
+      "fileName": "projecthub.pdf",
+      "fileURL": "/projects/download/projecthub.pdf?inline=true",
+      "subject": "Computer Science",
+      "department": "CSE",
+      "submittedDate": "2026-06-02",
+      "version": 1
+    },
+    "certificate": {
+      "id": "665f11c7e6a7c1f0a91c0002",
+      "title": "AWS Cloud Practitioner",
+      "organization": "Amazon Web Services",
+      "category": "Cloud",
+      "department": "CSE",
+      "issueDate": "2026-05-28",
+      "status": "PENDING",
+      "remarks": "",
+      "studentId": 2,
+      "studentName": "siva",
+      "facultyId": 2,
+      "facultyName": "John Doe",
+      "fileName": "aws.pdf",
+      "fileURL": "/projects/download/aws.pdf?inline=true",
+      "uploadDate": "2026-06-02",
+      "submittedDate": "2026-06-02",
+      "version": 1
+    },
+    "notification": {
+      "id": "665f12d8e6a7c1f0a91c0003",
+      "userId": 30,
+      "role": "STUDENT",
+      "title": "Project Approved",
+      "message": "Your project review has been updated.",
+      "type": "success",
+      "read": false,
+      "createdAt": "2026-06-02T09:30:00"
+    },
+    "deadline_rule": {
+      "id": "665f13e9e6a7c1f0a91c0004",
+      "type": "Project",
+      "name": "Final Project Submission",
+      "deadline": "2026-06-15",
+      "resubmissions": 3,
+      "status": "Active"
+    }
+  },
+  "modules": {
+    "Authentication": [
+      {
+        "module": "Authentication",
+        "method": "POST",
+        "url": "http://localhost:8081/users/login",
+        "path": "/users/login",
+        "auth": "Public / no JWT required in current SecurityConfig",
+        "purpose": "Login and receive JWT token.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "email": "admin@gmail.com",
+          "password": "123"
+        },
+        "responseJson": {
+          "token": "eyJhbGciOiJIUzI1NiJ9...",
+          "id": 8,
+          "role": "ADMIN",
+          "fullName": "Admin"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Authentication",
+        "method": "POST",
+        "url": "http://localhost:8081/auth/register",
+        "path": "/auth/register",
+        "auth": "Public / no JWT required in current SecurityConfig",
+        "purpose": "Register a new user.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "fullName": "Test Student",
+          "email": "student@test.com",
+          "password": "Password@123",
+          "role": "STUDENT",
+          "username": "teststudent"
+        },
+        "responseJson": {
+          "id": 30,
+          "fullName": "siva",
+          "email": "siva062005@gmail.com",
+          "role": "STUDENT",
+          "username": null,
+          "assignedSubject": null
+        },
+        "notes": ""
+      }
+    ],
+    "Users": [
+      {
+        "module": "Users",
+        "method": "POST",
+        "url": "http://localhost:8081/users",
+        "path": "/users",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Create a user.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "fullName": "Swathi",
+          "email": "swathi@test.com",
+          "password": "Password@123",
+          "role": "STUDENT"
+        },
+        "responseJson": {
+          "id": 41,
+          "fullName": "Swathi",
+          "email": "swathi@test.com",
+          "role": "STUDENT"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "GET",
+        "url": "http://localhost:8081/users",
+        "path": "/users",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get all users.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": 8,
+            "fullName": "Admin",
+            "email": "admin@gmail.com",
+            "role": "ADMIN",
+            "username": null,
+            "assignedSubject": null
+          },
+          {
+            "id": 30,
+            "fullName": "siva",
+            "email": "siva062005@gmail.com",
+            "role": "STUDENT",
+            "username": null,
+            "assignedSubject": null
+          },
+          {
+            "id": 38,
+            "fullName": "John Doe",
+            "email": "faculty1@demo.com",
+            "role": "FACULTY",
+            "username": null,
+            "assignedSubject": "Computer Science"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "GET",
+        "url": "http://localhost:8081/users/{id}",
+        "path": "/users/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get user by id.",
+        "queryOrPathParams": {
+          "id": 30
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": 30,
+          "fullName": "siva",
+          "email": "siva062005@gmail.com",
+          "role": "STUDENT",
+          "username": null,
+          "assignedSubject": null
+        },
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "PUT",
+        "url": "http://localhost:8081/users/{id}",
+        "path": "/users/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Update user and role profile fields.",
+        "queryOrPathParams": {
+          "id": 30
+        },
+        "requestJson": {
+          "fullName": "Student Updated",
+          "department": "CSE",
+          "year": "2026"
+        },
+        "responseJson": {
+          "id": 30,
+          "fullName": "Student Updated",
+          "email": "siva062005@gmail.com",
+          "role": "STUDENT"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "DELETE",
+        "url": "http://localhost:8081/users/{id}",
+        "path": "/users/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Delete user by id.",
+        "queryOrPathParams": {
+          "id": 42
+        },
+        "requestJson": null,
+        "responseJson": "User deleted successfully",
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "GET",
+        "url": "http://localhost:8081/users/search?name=siva",
+        "path": "/users/search?name=siva",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Search users by full name.",
+        "queryOrPathParams": {
+          "name": "siva"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": 30,
+            "fullName": "siva",
+            "email": "siva062005@gmail.com",
+            "role": "STUDENT",
+            "username": null,
+            "assignedSubject": null
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "GET",
+        "url": "http://localhost:8081/users/filter/role?role=STUDENT",
+        "path": "/users/filter/role?role=STUDENT",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Filter users by role.",
+        "queryOrPathParams": {
+          "role": "STUDENT"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": 30,
+            "fullName": "siva",
+            "email": "siva062005@gmail.com",
+            "role": "STUDENT",
+            "username": null,
+            "assignedSubject": null
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "PUT",
+        "url": "http://localhost:8081/users/assign-faculty/{id}?subject=Computer%20Science",
+        "path": "/users/assign-faculty/{id}?subject=Computer%20Science",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Assign subject to a faculty user.",
+        "queryOrPathParams": {
+          "id": 38,
+          "subject": "Computer Science"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": 38,
+          "fullName": "John Doe",
+          "email": "faculty1@demo.com",
+          "role": "FACULTY",
+          "username": null,
+          "assignedSubject": "Computer Science"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Users",
+        "method": "POST",
+        "url": "http://localhost:8081/users/bulk-upload",
+        "path": "/users/bulk-upload",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Bulk register users from Excel file.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "file": "users.xlsx (multipart/form-data)"
+        },
+        "responseJson": {
+          "created": 10,
+          "failed": 0,
+          "errors": []
+        },
+        "notes": "Consumes multipart/form-data."
+      }
+    ],
+    "Profiles": [
+      {
+        "module": "Profiles",
+        "method": "GET",
+        "url": "http://localhost:8081/users/student/profile/{id}",
+        "path": "/users/student/profile/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get student profile.",
+        "queryOrPathParams": {
+          "id": 2
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": 2,
+          "department": "ai/ds",
+          "studentCode": "STU-S157",
+          "section": null,
+          "enrollmentYear": null,
+          "year": "2024",
+          "githubUrl": "https://github.com/testuser",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "leetcodeUrl": "https://leetcode.com/testuser",
+          "hackerrankUrl": "https://hackerrank.com/testuser",
+          "portfolioUrl": "https://testuser.dev",
+          "faculty": {
+            "id": 2,
+            "department": "CSE",
+            "specialization": "Artificial Intelligence"
+          },
+          "user": {
+            "id": 30,
+            "fullName": "siva",
+            "email": "siva062005@gmail.com",
+            "role": "STUDENT"
+          }
+        },
+        "notes": ""
+      },
+      {
+        "module": "Profiles",
+        "method": "PUT",
+        "url": "http://localhost:8081/users/student/profile/{id}",
+        "path": "/users/student/profile/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Update student profile.",
+        "queryOrPathParams": {
+          "id": 2
+        },
+        "requestJson": {
+          "department": "CSE",
+          "year": "2026",
+          "githubUrl": "https://github.com/testuser"
+        },
+        "responseJson": {
+          "id": 2,
+          "department": "ai/ds",
+          "studentCode": "STU-S157",
+          "section": null,
+          "enrollmentYear": null,
+          "year": "2024",
+          "githubUrl": "https://github.com/testuser",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "leetcodeUrl": "https://leetcode.com/testuser",
+          "hackerrankUrl": "https://hackerrank.com/testuser",
+          "portfolioUrl": "https://testuser.dev",
+          "faculty": {
+            "id": 2,
+            "department": "CSE",
+            "specialization": "Artificial Intelligence"
+          },
+          "user": {
+            "id": 30,
+            "fullName": "siva",
+            "email": "siva062005@gmail.com",
+            "role": "STUDENT"
+          }
+        },
+        "notes": ""
+      },
+      {
+        "module": "Profiles",
+        "method": "GET",
+        "url": "http://localhost:8081/users/faculty/profile/{id}",
+        "path": "/users/faculty/profile/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get faculty profile.",
+        "queryOrPathParams": {
+          "id": 2
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": 2,
+          "department": "CSE",
+          "specialization": "Artificial Intelligence",
+          "facultyCode": null,
+          "section": null,
+          "joiningYear": null,
+          "user": {
+            "id": 38,
+            "fullName": "John Doe",
+            "email": "faculty1@demo.com",
+            "role": "FACULTY"
+          }
+        },
+        "notes": ""
+      },
+      {
+        "module": "Profiles",
+        "method": "PUT",
+        "url": "http://localhost:8081/users/faculty/profile/{id}",
+        "path": "/users/faculty/profile/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Update faculty profile.",
+        "queryOrPathParams": {
+          "id": 2
+        },
+        "requestJson": {
+          "department": "CSE",
+          "specialization": "Cloud Computing",
+          "section": "A"
+        },
+        "responseJson": {
+          "id": 2,
+          "department": "CSE",
+          "specialization": "Artificial Intelligence",
+          "facultyCode": null,
+          "section": null,
+          "joiningYear": null,
+          "user": {
+            "id": 38,
+            "fullName": "John Doe",
+            "email": "faculty1@demo.com",
+            "role": "FACULTY"
+          }
+        },
+        "notes": ""
+      }
+    ],
+    "Settings and Analytics": [
+      {
+        "module": "Settings and Analytics",
+        "method": "POST",
+        "url": "http://localhost:8081/users/settings",
+        "path": "/users/settings",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Save admin settings.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "submissionDeadline": "30-05-2026",
+          "maxResubmissions": 3,
+          "maxFileSize": 25,
+          "allowedFileTypes": "pdf,docx,png"
+        },
+        "responseJson": {
+          "id": 1,
+          "submissionDeadline": "30-05-2026",
+          "maxResubmissions": 3,
+          "maxFileSize": 25,
+          "allowedFileTypes": null
+        },
+        "notes": ""
+      },
+      {
+        "module": "Settings and Analytics",
+        "method": "GET",
+        "url": "http://localhost:8081/users/settings",
+        "path": "/users/settings",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get admin settings.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": 1,
+            "submissionDeadline": "30-05-2026",
+            "maxResubmissions": 3,
+            "maxFileSize": 25,
+            "allowedFileTypes": null
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Settings and Analytics",
+        "method": "GET",
+        "url": "http://localhost:8081/users/admin/analytics",
+        "path": "/users/admin/analytics",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get admin analytics.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": {
+          "totalUsers": 13,
+          "totalProjects": 0,
+          "approvedProjects": 0,
+          "pendingProjects": 0,
+          "totalCertificates": 0,
+          "approvedCertificates": 0,
+          "facultyCount": 2
+        },
+        "notes": ""
+      },
+      {
+        "module": "Settings and Analytics",
+        "method": "GET",
+        "url": "http://localhost:8081/dashboard",
+        "path": "/dashboard",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get dashboard counts.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": {
+          "totalProjects": 1,
+          "approvedProjects": 0,
+          "pendingProjects": 1,
+          "verifiedCertificates": 0
+        },
+        "notes": ""
+      }
+    ],
+    "Notifications": [
+      {
+        "module": "Notifications",
+        "method": "POST",
+        "url": "http://localhost:8081/users/notifications",
+        "path": "/users/notifications",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Create MongoDB notification.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "id": "665f12d8e6a7c1f0a91c0003",
+          "userId": 30,
+          "role": "STUDENT",
+          "title": "Project Approved",
+          "message": "Your project review has been updated.",
+          "type": "success",
+          "read": false,
+          "createdAt": "2026-06-02T09:30:00"
+        },
+        "responseJson": {
+          "id": "665f12d8e6a7c1f0a91c0003",
+          "userId": 30,
+          "role": "STUDENT",
+          "title": "Project Approved",
+          "message": "Your project review has been updated.",
+          "type": "success",
+          "read": false,
+          "createdAt": "2026-06-02T09:30:00"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Notifications",
+        "method": "GET",
+        "url": "http://localhost:8081/users/notifications/{userId}",
+        "path": "/users/notifications/{userId}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get notifications for a user.",
+        "queryOrPathParams": {
+          "userId": 30
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f12d8e6a7c1f0a91c0003",
+            "userId": 30,
+            "role": "STUDENT",
+            "title": "Project Approved",
+            "message": "Your project review has been updated.",
+            "type": "success",
+            "read": false,
+            "createdAt": "2026-06-02T09:30:00"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Notifications",
+        "method": "PUT",
+        "url": "http://localhost:8081/users/notifications/read/{id}",
+        "path": "/users/notifications/read/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Mark notification as read.",
+        "queryOrPathParams": {
+          "id": "665f12d8e6a7c1f0a91c0003"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": "665f12d8e6a7c1f0a91c0003",
+          "userId": 30,
+          "role": "STUDENT",
+          "title": "Project Approved",
+          "message": "Your project review has been updated.",
+          "type": "success",
+          "read": true,
+          "createdAt": "2026-06-02T09:30:00"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Notifications",
+        "method": "DELETE",
+        "url": "http://localhost:8081/users/notifications/{id}",
+        "path": "/users/notifications/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Delete notification.",
+        "queryOrPathParams": {
+          "id": "665f12d8e6a7c1f0a91c0003"
+        },
+        "requestJson": null,
+        "responseJson": "Notification deleted",
+        "notes": ""
+      }
+    ],
+    "Audit Logs": [
+      {
+        "module": "Audit Logs",
+        "method": "GET",
+        "url": "http://localhost:8081/users/audit-logs",
+        "path": "/users/audit-logs",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get audit logs from MySQL.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": 11,
+            "actionTitle": "User Created",
+            "description": "Created new user: priyasri",
+            "performedBy": {
+              "id": 43,
+              "fullName": "priyasri"
+            },
+            "createdAt": "2026-06-01T15:54:03"
+          }
+        ],
+        "notes": ""
+      }
+    ],
+    "Projects": [
+      {
+        "module": "Projects",
+        "method": "POST",
+        "url": "http://localhost:8081/projects/upload",
+        "path": "/projects/upload",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Upload project/certificate file.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "file": "projecthub.pdf (multipart/form-data)"
+        },
+        "responseJson": "1717315200000_projecthub.pdf",
+        "notes": "Consumes multipart/form-data."
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/download/{fileName}?inline=true",
+        "path": "/projects/download/{fileName}?inline=true",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Download or preview uploaded file.",
+        "queryOrPathParams": {
+          "fileName": "projecthub.pdf",
+          "inline": true
+        },
+        "requestJson": null,
+        "responseJson": "Binary file stream",
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "POST",
+        "url": "http://localhost:8081/projects/mongo",
+        "path": "/projects/mongo",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Create MongoDB project.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "AI Student Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "PENDING",
+          "feedback": "",
+          "grade": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "responseJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "AI Student Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "PENDING",
+          "feedback": "",
+          "grade": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo",
+        "path": "/projects/mongo",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get all MongoDB projects.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/student/{studentId}",
+        "path": "/projects/mongo/student/{studentId}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get projects by student.",
+        "queryOrPathParams": {
+          "studentId": 2
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/faculty/{facultyId}",
+        "path": "/projects/mongo/faculty/{facultyId}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get projects assigned to faculty.",
+        "queryOrPathParams": {
+          "facultyId": 2
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/{id}",
+        "path": "/projects/mongo/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get project by Mongo id.",
+        "queryOrPathParams": {
+          "id": "665f10b2e6a7c1f0a91c0001"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "AI Student Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "PENDING",
+          "feedback": "",
+          "grade": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "PUT",
+        "url": "http://localhost:8081/projects/mongo/review/{id}?status=APPROVED&feedback=Good&grade=A",
+        "path": "/projects/mongo/review/{id}?status=APPROVED&feedback=Good&grade=A",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Review project.",
+        "queryOrPathParams": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "status": "APPROVED",
+          "feedback": "Good",
+          "grade": "A"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "AI Student Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "APPROVED",
+          "feedback": "Good",
+          "grade": "A",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "PUT",
+        "url": "http://localhost:8081/projects/mongo/update/{id}",
+        "path": "/projects/mongo/update/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Update project details.",
+        "queryOrPathParams": {
+          "id": "665f10b2e6a7c1f0a91c0001"
+        },
+        "requestJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "Updated Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "PENDING",
+          "feedback": "",
+          "grade": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "responseJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "Updated Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "PENDING",
+          "feedback": "",
+          "grade": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "PUT",
+        "url": "http://localhost:8081/projects/mongo/resubmit/{id}",
+        "path": "/projects/mongo/resubmit/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Resubmit project and increment version.",
+        "queryOrPathParams": {
+          "id": "665f10b2e6a7c1f0a91c0001"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": "665f10b2e6a7c1f0a91c0001",
+          "title": "AI Student Project Hub",
+          "abstractText": "A portal for submitting and reviewing student projects.",
+          "technology": "React, Spring Boot, MongoDB",
+          "status": "PENDING",
+          "feedback": "",
+          "grade": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "githubUrl": "https://github.com/testuser/projecthub",
+          "linkedinUrl": "https://linkedin.com/in/testuser",
+          "fileName": "projecthub.pdf",
+          "fileURL": "/projects/download/projecthub.pdf?inline=true",
+          "subject": "Computer Science",
+          "department": "CSE",
+          "submittedDate": "2026-06-02",
+          "version": 2
+        },
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "DELETE",
+        "url": "http://localhost:8081/projects/mongo/{id}",
+        "path": "/projects/mongo/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Delete project.",
+        "queryOrPathParams": {
+          "id": "665f10b2e6a7c1f0a91c0001"
+        },
+        "requestJson": null,
+        "responseJson": "Project deleted",
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/search?title=AI",
+        "path": "/projects/mongo/search?title=AI",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Search projects by title.",
+        "queryOrPathParams": {
+          "title": "AI"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/filter/status?status=PENDING",
+        "path": "/projects/mongo/filter/status?status=PENDING",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Filter projects by status.",
+        "queryOrPathParams": {
+          "status": "PENDING"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/filter/technology?technology=React",
+        "path": "/projects/mongo/filter/technology?technology=React",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Filter projects by technology.",
+        "queryOrPathParams": {
+          "technology": "React"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/mongo/filter?status=PENDING&technology=React",
+        "path": "/projects/mongo/filter?status=PENDING&technology=React",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Filter projects by status and technology.",
+        "queryOrPathParams": {
+          "status": "PENDING",
+          "technology": "React"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Projects",
+        "method": "GET",
+        "url": "http://localhost:8081/projects/analytics/student/{studentId}",
+        "path": "/projects/analytics/student/{studentId}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get student project analytics.",
+        "queryOrPathParams": {
+          "studentId": 2
+        },
+        "requestJson": null,
+        "responseJson": {
+          "totalProjects": 1,
+          "approvedProjects": 0,
+          "pendingProjects": 1,
+          "rejectedProjects": 0
+        },
+        "notes": ""
+      }
+    ],
+    "Certificates": [
+      {
+        "module": "Certificates",
+        "method": "POST",
+        "url": "http://localhost:8081/certificates",
+        "path": "/certificates",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Create MongoDB certificate.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "title": "AWS Cloud Practitioner",
+          "organization": "Amazon Web Services",
+          "category": "Cloud",
+          "department": "CSE",
+          "issueDate": "2026-05-28",
+          "status": "PENDING",
+          "remarks": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "fileName": "aws.pdf",
+          "fileURL": "/projects/download/aws.pdf?inline=true",
+          "uploadDate": "2026-06-02",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "responseJson": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "title": "AWS Cloud Practitioner",
+          "organization": "Amazon Web Services",
+          "category": "Cloud",
+          "department": "CSE",
+          "issueDate": "2026-05-28",
+          "status": "PENDING",
+          "remarks": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "fileName": "aws.pdf",
+          "fileURL": "/projects/download/aws.pdf?inline=true",
+          "uploadDate": "2026-06-02",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "GET",
+        "url": "http://localhost:8081/certificates",
+        "path": "/certificates",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get all certificates.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f11c7e6a7c1f0a91c0002",
+            "title": "AWS Cloud Practitioner",
+            "organization": "Amazon Web Services",
+            "category": "Cloud",
+            "department": "CSE",
+            "issueDate": "2026-05-28",
+            "status": "PENDING",
+            "remarks": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "fileName": "aws.pdf",
+            "fileURL": "/projects/download/aws.pdf?inline=true",
+            "uploadDate": "2026-06-02",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "GET",
+        "url": "http://localhost:8081/certificates/student/{studentId}",
+        "path": "/certificates/student/{studentId}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get certificates by student.",
+        "queryOrPathParams": {
+          "studentId": 2
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f11c7e6a7c1f0a91c0002",
+            "title": "AWS Cloud Practitioner",
+            "organization": "Amazon Web Services",
+            "category": "Cloud",
+            "department": "CSE",
+            "issueDate": "2026-05-28",
+            "status": "PENDING",
+            "remarks": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "fileName": "aws.pdf",
+            "fileURL": "/projects/download/aws.pdf?inline=true",
+            "uploadDate": "2026-06-02",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "GET",
+        "url": "http://localhost:8081/certificates/faculty/{facultyId}",
+        "path": "/certificates/faculty/{facultyId}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get certificates by faculty.",
+        "queryOrPathParams": {
+          "facultyId": 2
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f11c7e6a7c1f0a91c0002",
+            "title": "AWS Cloud Practitioner",
+            "organization": "Amazon Web Services",
+            "category": "Cloud",
+            "department": "CSE",
+            "issueDate": "2026-05-28",
+            "status": "PENDING",
+            "remarks": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "fileName": "aws.pdf",
+            "fileURL": "/projects/download/aws.pdf?inline=true",
+            "uploadDate": "2026-06-02",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "PUT",
+        "url": "http://localhost:8081/certificates/{id}/verify?status=APPROVED&remarks=Verified",
+        "path": "/certificates/{id}/verify?status=APPROVED&remarks=Verified",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Approve or reject certificate.",
+        "queryOrPathParams": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "status": "APPROVED",
+          "remarks": "Verified"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "title": "AWS Cloud Practitioner",
+          "organization": "Amazon Web Services",
+          "category": "Cloud",
+          "department": "CSE",
+          "issueDate": "2026-05-28",
+          "status": "APPROVED",
+          "remarks": "Verified",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "fileName": "aws.pdf",
+          "fileURL": "/projects/download/aws.pdf?inline=true",
+          "uploadDate": "2026-06-02",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "PUT",
+        "url": "http://localhost:8081/certificates/{id}",
+        "path": "/certificates/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Update certificate.",
+        "queryOrPathParams": {
+          "id": "665f11c7e6a7c1f0a91c0002"
+        },
+        "requestJson": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "title": "AWS Cloud Practitioner",
+          "organization": "Amazon Web Services",
+          "category": "Cloud Computing",
+          "department": "CSE",
+          "issueDate": "2026-05-28",
+          "status": "PENDING",
+          "remarks": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "fileName": "aws.pdf",
+          "fileURL": "/projects/download/aws.pdf?inline=true",
+          "uploadDate": "2026-06-02",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "responseJson": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "title": "AWS Cloud Practitioner",
+          "organization": "Amazon Web Services",
+          "category": "Cloud Computing",
+          "department": "CSE",
+          "issueDate": "2026-05-28",
+          "status": "PENDING",
+          "remarks": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "fileName": "aws.pdf",
+          "fileURL": "/projects/download/aws.pdf?inline=true",
+          "uploadDate": "2026-06-02",
+          "submittedDate": "2026-06-02",
+          "version": 1
+        },
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "PUT",
+        "url": "http://localhost:8081/certificates/{id}/resubmit",
+        "path": "/certificates/{id}/resubmit",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Resubmit certificate.",
+        "queryOrPathParams": {
+          "id": "665f11c7e6a7c1f0a91c0002"
+        },
+        "requestJson": null,
+        "responseJson": {
+          "id": "665f11c7e6a7c1f0a91c0002",
+          "title": "AWS Cloud Practitioner",
+          "organization": "Amazon Web Services",
+          "category": "Cloud",
+          "department": "CSE",
+          "issueDate": "2026-05-28",
+          "status": "PENDING",
+          "remarks": "",
+          "studentId": 2,
+          "studentName": "siva",
+          "facultyId": 2,
+          "facultyName": "John Doe",
+          "fileName": "aws.pdf",
+          "fileURL": "/projects/download/aws.pdf?inline=true",
+          "uploadDate": "2026-06-02",
+          "submittedDate": "2026-06-02",
+          "version": 2
+        },
+        "notes": ""
+      },
+      {
+        "module": "Certificates",
+        "method": "DELETE",
+        "url": "http://localhost:8081/certificates/{id}",
+        "path": "/certificates/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Delete certificate.",
+        "queryOrPathParams": {
+          "id": "665f11c7e6a7c1f0a91c0002"
+        },
+        "requestJson": null,
+        "responseJson": "Certificate deleted",
+        "notes": ""
+      }
+    ],
+    "Deadline Rules": [
+      {
+        "module": "Deadline Rules",
+        "method": "GET",
+        "url": "http://localhost:8081/deadline-rules",
+        "path": "/deadline-rules",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get all deadline rules.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f13e9e6a7c1f0a91c0004",
+            "type": "Project",
+            "name": "Final Project Submission",
+            "deadline": "2026-06-15",
+            "resubmissions": 3,
+            "status": "Active"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Deadline Rules",
+        "method": "GET",
+        "url": "http://localhost:8081/deadline-rules/type/{type}",
+        "path": "/deadline-rules/type/{type}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Get deadline rules by type.",
+        "queryOrPathParams": {
+          "type": "Project"
+        },
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f13e9e6a7c1f0a91c0004",
+            "type": "Project",
+            "name": "Final Project Submission",
+            "deadline": "2026-06-15",
+            "resubmissions": 3,
+            "status": "Active"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Deadline Rules",
+        "method": "POST",
+        "url": "http://localhost:8081/deadline-rules",
+        "path": "/deadline-rules",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Create or update deadline rule.",
+        "queryOrPathParams": {},
+        "requestJson": {
+          "id": "665f13e9e6a7c1f0a91c0004",
+          "type": "Project",
+          "name": "Final Project Submission",
+          "deadline": "2026-06-15",
+          "resubmissions": 3,
+          "status": "Active"
+        },
+        "responseJson": {
+          "id": "665f13e9e6a7c1f0a91c0004",
+          "type": "Project",
+          "name": "Final Project Submission",
+          "deadline": "2026-06-15",
+          "resubmissions": 3,
+          "status": "Active"
+        },
+        "notes": ""
+      },
+      {
+        "module": "Deadline Rules",
+        "method": "DELETE",
+        "url": "http://localhost:8081/deadline-rules/{id}",
+        "path": "/deadline-rules/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Delete deadline rule.",
+        "queryOrPathParams": {
+          "id": "665f13e9e6a7c1f0a91c0004"
+        },
+        "requestJson": null,
+        "responseJson": "Deadline rule deleted",
+        "notes": ""
+      }
+    ],
+    "Admin": [
+      {
+        "module": "Admin",
+        "method": "GET",
+        "url": "http://localhost:8081/admin/users",
+        "path": "/admin/users",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Admin: get all users.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": 8,
+            "fullName": "Admin",
+            "email": "admin@gmail.com",
+            "role": "ADMIN",
+            "username": null,
+            "assignedSubject": null
+          },
+          {
+            "id": 30,
+            "fullName": "siva",
+            "email": "siva062005@gmail.com",
+            "role": "STUDENT",
+            "username": null,
+            "assignedSubject": null
+          },
+          {
+            "id": 38,
+            "fullName": "John Doe",
+            "email": "faculty1@demo.com",
+            "role": "FACULTY",
+            "username": null,
+            "assignedSubject": "Computer Science"
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Admin",
+        "method": "DELETE",
+        "url": "http://localhost:8081/admin/users/{id}",
+        "path": "/admin/users/{id}",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Admin: delete user.",
+        "queryOrPathParams": {
+          "id": 42
+        },
+        "requestJson": null,
+        "responseJson": "User deleted successfully",
+        "notes": ""
+      },
+      {
+        "module": "Admin",
+        "method": "GET",
+        "url": "http://localhost:8081/admin/projects",
+        "path": "/admin/projects",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Admin: get all projects.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f10b2e6a7c1f0a91c0001",
+            "title": "AI Student Project Hub",
+            "abstractText": "A portal for submitting and reviewing student projects.",
+            "technology": "React, Spring Boot, MongoDB",
+            "status": "PENDING",
+            "feedback": "",
+            "grade": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "githubUrl": "https://github.com/testuser/projecthub",
+            "linkedinUrl": "https://linkedin.com/in/testuser",
+            "fileName": "projecthub.pdf",
+            "fileURL": "/projects/download/projecthub.pdf?inline=true",
+            "subject": "Computer Science",
+            "department": "CSE",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Admin",
+        "method": "GET",
+        "url": "http://localhost:8081/admin/certificates",
+        "path": "/admin/certificates",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Admin: get all certificates.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": [
+          {
+            "id": "665f11c7e6a7c1f0a91c0002",
+            "title": "AWS Cloud Practitioner",
+            "organization": "Amazon Web Services",
+            "category": "Cloud",
+            "department": "CSE",
+            "issueDate": "2026-05-28",
+            "status": "PENDING",
+            "remarks": "",
+            "studentId": 2,
+            "studentName": "siva",
+            "facultyId": 2,
+            "facultyName": "John Doe",
+            "fileName": "aws.pdf",
+            "fileURL": "/projects/download/aws.pdf?inline=true",
+            "uploadDate": "2026-06-02",
+            "submittedDate": "2026-06-02",
+            "version": 1
+          }
+        ],
+        "notes": ""
+      },
+      {
+        "module": "Admin",
+        "method": "GET",
+        "url": "http://localhost:8081/admin/dashboard",
+        "path": "/admin/dashboard",
+        "auth": "Bearer JWT required after login",
+        "purpose": "Admin: get dashboard counts.",
+        "queryOrPathParams": {},
+        "requestJson": null,
+        "responseJson": {
+          "totalProjects": 1,
+          "approvedProjects": 0,
+          "pendingProjects": 1,
+          "totalCertificates": 1
+        },
+        "notes": ""
+      }
+    ]
+  }
+}

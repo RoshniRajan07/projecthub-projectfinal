@@ -1,0 +1,458 @@
+[
+  {
+    "sNo": 1,
+    "module": "Authentication",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/login",
+    "originalApiUrl": "http://localhost:8081/users/login"
+  },
+  {
+    "sNo": 2,
+    "module": "Authentication",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/auth/register",
+    "originalApiUrl": "http://localhost:8081/auth/register"
+  },
+  {
+    "sNo": 3,
+    "module": "Users",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users",
+    "originalApiUrl": "http://localhost:8081/users"
+  },
+  {
+    "sNo": 4,
+    "module": "Users",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users",
+    "originalApiUrl": "http://localhost:8081/users"
+  },
+  {
+    "sNo": 5,
+    "module": "Users",
+    "method": "GET",
+    "reference": "id=30",
+    "apiUrl": "http://localhost:8081/users/30",
+    "originalApiUrl": "http://localhost:8081/users/{id}"
+  },
+  {
+    "sNo": 6,
+    "module": "Users",
+    "method": "PUT",
+    "reference": "id=30",
+    "apiUrl": "http://localhost:8081/users/30",
+    "originalApiUrl": "http://localhost:8081/users/{id}"
+  },
+  {
+    "sNo": 7,
+    "module": "Users",
+    "method": "DELETE",
+    "reference": "id=42",
+    "apiUrl": "http://localhost:8081/users/42",
+    "originalApiUrl": "http://localhost:8081/users/{id}"
+  },
+  {
+    "sNo": 8,
+    "module": "Users",
+    "method": "GET",
+    "reference": "name=siva",
+    "apiUrl": "http://localhost:8081/users/search?name=siva",
+    "originalApiUrl": "http://localhost:8081/users/search?name=siva"
+  },
+  {
+    "sNo": 9,
+    "module": "Users",
+    "method": "GET",
+    "reference": "role=STUDENT",
+    "apiUrl": "http://localhost:8081/users/filter/role?role=STUDENT",
+    "originalApiUrl": "http://localhost:8081/users/filter/role?role=STUDENT"
+  },
+  {
+    "sNo": 10,
+    "module": "Users",
+    "method": "PUT",
+    "reference": "id=38, subject=Computer Science",
+    "apiUrl": "http://localhost:8081/users/assign-faculty/38?subject=Computer%20Science",
+    "originalApiUrl": "http://localhost:8081/users/assign-faculty/{id}?subject=Computer%20Science"
+  },
+  {
+    "sNo": 11,
+    "module": "Users",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/bulk-upload",
+    "originalApiUrl": "http://localhost:8081/users/bulk-upload"
+  },
+  {
+    "sNo": 12,
+    "module": "Profiles",
+    "method": "GET",
+    "reference": "id=2",
+    "apiUrl": "http://localhost:8081/users/student/profile/2",
+    "originalApiUrl": "http://localhost:8081/users/student/profile/{id}"
+  },
+  {
+    "sNo": 13,
+    "module": "Profiles",
+    "method": "PUT",
+    "reference": "id=2",
+    "apiUrl": "http://localhost:8081/users/student/profile/2",
+    "originalApiUrl": "http://localhost:8081/users/student/profile/{id}"
+  },
+  {
+    "sNo": 14,
+    "module": "Profiles",
+    "method": "GET",
+    "reference": "id=2",
+    "apiUrl": "http://localhost:8081/users/faculty/profile/2",
+    "originalApiUrl": "http://localhost:8081/users/faculty/profile/{id}"
+  },
+  {
+    "sNo": 15,
+    "module": "Profiles",
+    "method": "PUT",
+    "reference": "id=2",
+    "apiUrl": "http://localhost:8081/users/faculty/profile/2",
+    "originalApiUrl": "http://localhost:8081/users/faculty/profile/{id}"
+  },
+  {
+    "sNo": 16,
+    "module": "Settings and Analytics",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/settings",
+    "originalApiUrl": "http://localhost:8081/users/settings"
+  },
+  {
+    "sNo": 17,
+    "module": "Settings and Analytics",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/settings",
+    "originalApiUrl": "http://localhost:8081/users/settings"
+  },
+  {
+    "sNo": 18,
+    "module": "Settings and Analytics",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/admin/analytics",
+    "originalApiUrl": "http://localhost:8081/users/admin/analytics"
+  },
+  {
+    "sNo": 19,
+    "module": "Settings and Analytics",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/dashboard",
+    "originalApiUrl": "http://localhost:8081/dashboard"
+  },
+  {
+    "sNo": 20,
+    "module": "Notifications",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/notifications",
+    "originalApiUrl": "http://localhost:8081/users/notifications"
+  },
+  {
+    "sNo": 21,
+    "module": "Notifications",
+    "method": "GET",
+    "reference": "userId=30",
+    "apiUrl": "http://localhost:8081/users/notifications/30",
+    "originalApiUrl": "http://localhost:8081/users/notifications/{userId}"
+  },
+  {
+    "sNo": 22,
+    "module": "Notifications",
+    "method": "PUT",
+    "reference": "id=665f12d8e6a7c1f0a91c0003",
+    "apiUrl": "http://localhost:8081/users/notifications/read/665f12d8e6a7c1f0a91c0003",
+    "originalApiUrl": "http://localhost:8081/users/notifications/read/{id}"
+  },
+  {
+    "sNo": 23,
+    "module": "Notifications",
+    "method": "DELETE",
+    "reference": "id=665f12d8e6a7c1f0a91c0003",
+    "apiUrl": "http://localhost:8081/users/notifications/665f12d8e6a7c1f0a91c0003",
+    "originalApiUrl": "http://localhost:8081/users/notifications/{id}"
+  },
+  {
+    "sNo": 24,
+    "module": "Audit Logs",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/users/audit-logs",
+    "originalApiUrl": "http://localhost:8081/users/audit-logs"
+  },
+  {
+    "sNo": 25,
+    "module": "Projects",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/projects/upload",
+    "originalApiUrl": "http://localhost:8081/projects/upload"
+  },
+  {
+    "sNo": 26,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "fileName=projecthub.pdf, inline=True",
+    "apiUrl": "http://localhost:8081/projects/download/projecthub.pdf?inline=true",
+    "originalApiUrl": "http://localhost:8081/projects/download/{fileName}?inline=true"
+  },
+  {
+    "sNo": 27,
+    "module": "Projects",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/projects/mongo",
+    "originalApiUrl": "http://localhost:8081/projects/mongo"
+  },
+  {
+    "sNo": 28,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/projects/mongo",
+    "originalApiUrl": "http://localhost:8081/projects/mongo"
+  },
+  {
+    "sNo": 29,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "studentId=2",
+    "apiUrl": "http://localhost:8081/projects/mongo/student/2",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/student/{studentId}"
+  },
+  {
+    "sNo": 30,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "facultyId=2",
+    "apiUrl": "http://localhost:8081/projects/mongo/faculty/2",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/faculty/{facultyId}"
+  },
+  {
+    "sNo": 31,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "id=665f10b2e6a7c1f0a91c0001",
+    "apiUrl": "http://localhost:8081/projects/mongo/665f10b2e6a7c1f0a91c0001",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/{id}"
+  },
+  {
+    "sNo": 32,
+    "module": "Projects",
+    "method": "PUT",
+    "reference": "id=665f10b2e6a7c1f0a91c0001, status=APPROVED, feedback=Good, grade=A",
+    "apiUrl": "http://localhost:8081/projects/mongo/review/665f10b2e6a7c1f0a91c0001?status=APPROVED&feedback=Good&grade=A",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/review/{id}?status=APPROVED&feedback=Good&grade=A"
+  },
+  {
+    "sNo": 33,
+    "module": "Projects",
+    "method": "PUT",
+    "reference": "id=665f10b2e6a7c1f0a91c0001",
+    "apiUrl": "http://localhost:8081/projects/mongo/update/665f10b2e6a7c1f0a91c0001",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/update/{id}"
+  },
+  {
+    "sNo": 34,
+    "module": "Projects",
+    "method": "PUT",
+    "reference": "id=665f10b2e6a7c1f0a91c0001",
+    "apiUrl": "http://localhost:8081/projects/mongo/resubmit/665f10b2e6a7c1f0a91c0001",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/resubmit/{id}"
+  },
+  {
+    "sNo": 35,
+    "module": "Projects",
+    "method": "DELETE",
+    "reference": "id=665f10b2e6a7c1f0a91c0001",
+    "apiUrl": "http://localhost:8081/projects/mongo/665f10b2e6a7c1f0a91c0001",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/{id}"
+  },
+  {
+    "sNo": 36,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "title=AI",
+    "apiUrl": "http://localhost:8081/projects/mongo/search?title=AI",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/search?title=AI"
+  },
+  {
+    "sNo": 37,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "status=PENDING",
+    "apiUrl": "http://localhost:8081/projects/mongo/filter/status?status=PENDING",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/filter/status?status=PENDING"
+  },
+  {
+    "sNo": 38,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "technology=React",
+    "apiUrl": "http://localhost:8081/projects/mongo/filter/technology?technology=React",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/filter/technology?technology=React"
+  },
+  {
+    "sNo": 39,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "status=PENDING, technology=React",
+    "apiUrl": "http://localhost:8081/projects/mongo/filter?status=PENDING&technology=React",
+    "originalApiUrl": "http://localhost:8081/projects/mongo/filter?status=PENDING&technology=React"
+  },
+  {
+    "sNo": 40,
+    "module": "Projects",
+    "method": "GET",
+    "reference": "studentId=2",
+    "apiUrl": "http://localhost:8081/projects/analytics/student/2",
+    "originalApiUrl": "http://localhost:8081/projects/analytics/student/{studentId}"
+  },
+  {
+    "sNo": 41,
+    "module": "Certificates",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/certificates",
+    "originalApiUrl": "http://localhost:8081/certificates"
+  },
+  {
+    "sNo": 42,
+    "module": "Certificates",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/certificates",
+    "originalApiUrl": "http://localhost:8081/certificates"
+  },
+  {
+    "sNo": 43,
+    "module": "Certificates",
+    "method": "GET",
+    "reference": "studentId=2",
+    "apiUrl": "http://localhost:8081/certificates/student/2",
+    "originalApiUrl": "http://localhost:8081/certificates/student/{studentId}"
+  },
+  {
+    "sNo": 44,
+    "module": "Certificates",
+    "method": "GET",
+    "reference": "facultyId=2",
+    "apiUrl": "http://localhost:8081/certificates/faculty/2",
+    "originalApiUrl": "http://localhost:8081/certificates/faculty/{facultyId}"
+  },
+  {
+    "sNo": 45,
+    "module": "Certificates",
+    "method": "PUT",
+    "reference": "id=665f11c7e6a7c1f0a91c0002, status=APPROVED, remarks=Verified",
+    "apiUrl": "http://localhost:8081/certificates/665f11c7e6a7c1f0a91c0002/verify?status=APPROVED&remarks=Verified",
+    "originalApiUrl": "http://localhost:8081/certificates/{id}/verify?status=APPROVED&remarks=Verified"
+  },
+  {
+    "sNo": 46,
+    "module": "Certificates",
+    "method": "PUT",
+    "reference": "id=665f11c7e6a7c1f0a91c0002",
+    "apiUrl": "http://localhost:8081/certificates/665f11c7e6a7c1f0a91c0002",
+    "originalApiUrl": "http://localhost:8081/certificates/{id}"
+  },
+  {
+    "sNo": 47,
+    "module": "Certificates",
+    "method": "PUT",
+    "reference": "id=665f11c7e6a7c1f0a91c0002",
+    "apiUrl": "http://localhost:8081/certificates/665f11c7e6a7c1f0a91c0002/resubmit",
+    "originalApiUrl": "http://localhost:8081/certificates/{id}/resubmit"
+  },
+  {
+    "sNo": 48,
+    "module": "Certificates",
+    "method": "DELETE",
+    "reference": "id=665f11c7e6a7c1f0a91c0002",
+    "apiUrl": "http://localhost:8081/certificates/665f11c7e6a7c1f0a91c0002",
+    "originalApiUrl": "http://localhost:8081/certificates/{id}"
+  },
+  {
+    "sNo": 49,
+    "module": "Deadline Rules",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/deadline-rules",
+    "originalApiUrl": "http://localhost:8081/deadline-rules"
+  },
+  {
+    "sNo": 50,
+    "module": "Deadline Rules",
+    "method": "GET",
+    "reference": "type=Project",
+    "apiUrl": "http://localhost:8081/deadline-rules/type/Project",
+    "originalApiUrl": "http://localhost:8081/deadline-rules/type/{type}"
+  },
+  {
+    "sNo": 51,
+    "module": "Deadline Rules",
+    "method": "POST",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/deadline-rules",
+    "originalApiUrl": "http://localhost:8081/deadline-rules"
+  },
+  {
+    "sNo": 52,
+    "module": "Deadline Rules",
+    "method": "DELETE",
+    "reference": "id=665f13e9e6a7c1f0a91c0004",
+    "apiUrl": "http://localhost:8081/deadline-rules/665f13e9e6a7c1f0a91c0004",
+    "originalApiUrl": "http://localhost:8081/deadline-rules/{id}"
+  },
+  {
+    "sNo": 53,
+    "module": "Admin",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/admin/users",
+    "originalApiUrl": "http://localhost:8081/admin/users"
+  },
+  {
+    "sNo": 54,
+    "module": "Admin",
+    "method": "DELETE",
+    "reference": "id=42",
+    "apiUrl": "http://localhost:8081/admin/users/42",
+    "originalApiUrl": "http://localhost:8081/admin/users/{id}"
+  },
+  {
+    "sNo": 55,
+    "module": "Admin",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/admin/projects",
+    "originalApiUrl": "http://localhost:8081/admin/projects"
+  },
+  {
+    "sNo": 56,
+    "module": "Admin",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/admin/certificates",
+    "originalApiUrl": "http://localhost:8081/admin/certificates"
+  },
+  {
+    "sNo": 57,
+    "module": "Admin",
+    "method": "GET",
+    "reference": "-",
+    "apiUrl": "http://localhost:8081/admin/dashboard",
+    "originalApiUrl": "http://localhost:8081/admin/dashboard"
+  }
+]
