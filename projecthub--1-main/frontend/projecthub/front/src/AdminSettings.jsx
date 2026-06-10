@@ -309,7 +309,7 @@ const AdminSettings = () => {
         <div>
           <div className="logo">
             <div className="logo-box">🎓</div>
-            <h2>ProjectHub<span>+</span></h2>
+            <h2 className="settings-logo-title">ProjectHub<span>+</span></h2>
           </div>
           <div className="menu">
             <div className="menu-item" onClick={() => refreshAndNavigate("/admin-dashboard")}>

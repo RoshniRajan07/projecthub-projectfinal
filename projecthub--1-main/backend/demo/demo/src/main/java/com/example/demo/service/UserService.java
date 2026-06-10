@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
@@ -49,6 +52,7 @@ public class UserService {
 
     private static final String ENCRYPTED_PASSWORD_PREFIX = "enc:v2:";
     private static final String LOGIN_ENCRYPTION_KEY = "ProjectHubLoginKey2026AESKey1234";
+    private final Set<Long> adminNotificationSyncs = ConcurrentHashMap.newKeySet();
 
     @Autowired
     private UserRepository userRepository;
@@ -567,8 +571,16 @@ public class UserService {
         userRepository.findById(userId)
                 .filter(user -> "ADMIN".equalsIgnoreCase(user.getRole()))
                 .ifPresent(admin -> {
-                    syncAdminAuditNotifications(admin.getId());
-                    syncAdminSubmissionNotifications(admin.getId());
+                    if (adminNotificationSyncs.add(admin.getId())) {
+                        CompletableFuture.runAsync(() -> {
+                            try {
+                                syncAdminAuditNotifications(admin.getId());
+                                syncAdminSubmissionNotifications(admin.getId());
+                            } finally {
+                                adminNotificationSyncs.remove(admin.getId());
+                            }
+                        });
+                    }
                 });
         return notificationMongoRepository.findByUserId(userId);
     }

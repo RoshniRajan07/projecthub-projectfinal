@@ -123,26 +123,30 @@ export default function VerifyCertificates() {
     return latest.find((item) => item.id === id) || certificates.find((item) => item.id === id);
   };
 
-  const openReviewModal = async (item) => {
-    const latestCertificate = await getLatestCertificate(item.id) || item;
-    setSelectedCertificate(latestCertificate);
-    setRemarks(isFinalStatus(latestCertificate.status) ? latestCertificate.remarks || "" : "");
+  const openReviewModal = (item) => {
+    setSelectedCertificate(item);
+    setRemarks(isFinalStatus(item.status) ? item.remarks || "" : "");
+    getLatestCertificate(item.id).then((latestCertificate) => {
+      if (!latestCertificate) return;
+      setSelectedCertificate(latestCertificate);
+      setRemarks(isFinalStatus(latestCertificate.status) ? latestCertificate.remarks || "" : "");
+    });
   };
 
-  const refreshAndSet = async (setter, value) => {
-    await fetchCertificates();
+  const refreshAndSet = (setter, value) => {
     setter(value);
+    fetchCertificates();
   };
 
-  const refreshAndPage = async (updater) => {
-    await fetchCertificates();
+  const refreshAndPage = (updater) => {
     setCurrentPage(updater);
+    fetchCertificates();
   };
 
   const closeReviewModal = async () => {
-    await fetchCertificates();
     setSelectedCertificate(null);
     setRemarks("");
+    fetchCertificates();
   };
 
   const handleCertificateReview = async (nextStatus) => {
@@ -184,7 +188,7 @@ export default function VerifyCertificates() {
         <div>
           <div className="logo">
             <div className="logo-box">🎓</div>
-            <h2>ProjectHub+</h2>
+            <h2>ProjectHub<span>+</span></h2>
           </div>
           <div className="menu">
             <div className="menu-item" onClick={() => navigate("/faculty-dashboard")}><LayoutDashboard size={20} /><span>Dashboard</span></div>

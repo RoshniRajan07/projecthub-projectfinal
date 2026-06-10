@@ -55,6 +55,7 @@ const ManageUsers = () => {
       });
       if (res.ok) {
         const data = await res.json();
+        setUsers(data);
         const enrichedData = await Promise.all(data.map(async (user) => {
           const roleKey = (user.role || "").toUpperCase();
           if (roleKey !== "STUDENT" && roleKey !== "FACULTY") return user;
@@ -131,27 +132,27 @@ const ManageUsers = () => {
   };
 
   const openBulkModal = async () => {
-    await fetchUsers();
     setShowBulkModal(true);
     setBulkFile(null);
     setBulkResult(null);
+    fetchUsers();
   };
 
   const openAddModal = async () => {
-    await fetchUsers();
     setNewUser(EMPTY_USER);
     setShowAddModal(true);
+    fetchUsers();
   };
 
   const toggleRoleDropdown = async () => {
-    await fetchUsers();
     setShowDropdown(!showDropdown);
+    fetchUsers();
   };
 
   const selectRoleFilter = async (nextRole) => {
-    await fetchUsers();
     setRole(nextRole);
     setShowDropdown(false);
+    fetchUsers();
   };
 
   const refreshAndNavigate = (path) => {
@@ -159,23 +160,23 @@ const ManageUsers = () => {
   };
 
   const closeEditModal = async () => {
-    await fetchUsers();
     setEditUser(null);
+    fetchUsers();
   };
 
   const closeAddModal = async () => {
-    await fetchUsers();
     setShowAddModal(false);
+    fetchUsers();
   };
 
   const closeBulkModal = async () => {
-    await fetchUsers();
     setShowBulkModal(false);
+    fetchUsers();
   };
 
   const openFilePicker = async () => {
-    await fetchUsers();
     fileInputRef.current?.click();
+    fetchUsers();
   };
 
   const handleDelete = async (user) => {
@@ -263,7 +264,6 @@ const ManageUsers = () => {
   };
 
   const handleLogout = async () => {
-    await fetchUsers();
     localStorage.clear();
     navigate("/");
   };
@@ -684,7 +684,7 @@ const ManageUsers = () => {
         title={deleteConfirm?.title}
         message={deleteConfirm?.message}
         busy={deleting}
-        onCancel={async () => { await fetchUsers(); setDeleteConfirm(null); }}
+        onCancel={() => { setDeleteConfirm(null); fetchUsers(); }}
         onConfirm={() => deleteUsers(deleteConfirm.items)}
       />
     </div>

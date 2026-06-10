@@ -225,9 +225,12 @@
 
 .logo h2,
 .admin-logo h2 {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  transform: none !important;
+  white-space: nowrap !important;
 }
 
 .logo span,
@@ -305,6 +308,10 @@
   font-size: 15px;
   font-weight: 600;
   margin: 0 0 2px 0;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-text p,

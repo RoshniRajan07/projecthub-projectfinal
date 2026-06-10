@@ -25,11 +25,19 @@ const AdminNotifications = () => {
   const [token] = useState(() => localStorage.getItem("token"));
   const [userId] = useState(() => localStorage.getItem("userId"));
   const [fullName] = useState(() => localStorage.getItem("fullName") || "Admin");
+  const cacheKey = userId ? `adminNotifications:${userId}` : "adminNotifications";
 
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleting, setDeleting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => notifications.length === 0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchNotifications = useCallback(async () => {
@@ -39,14 +47,16 @@ const AdminNotifications = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setNotifications(data.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)));
+        const sorted = data.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        setNotifications(sorted);
+        sessionStorage.setItem(cacheKey, JSON.stringify(sorted));
         setLoading(false);
-        return data;
+        return sorted;
       }
     } catch (error) { console.error("Notifications fetch error:", error); }
     setLoading(false);
     return [];
-  }, [token, userId]);
+  }, [token, userId, cacheKey]);
 
   useEffect(() => {
     if (!token || !userId) { navigate("/"); return; }
@@ -65,7 +75,11 @@ const AdminNotifications = () => {
         })
       ));
       const deletedIds = items.map((item) => item.id);
-      setNotifications((prev) => prev.filter((item) => !deletedIds.includes(item.id)));
+      setNotifications((prev) => {
+        const next = prev.filter((item) => !deletedIds.includes(item.id));
+        sessionStorage.setItem(cacheKey, JSON.stringify(next));
+        return next;
+      });
       setDeleteConfirm(null);
     } catch (error) {
       console.error("Delete error:", error);
@@ -75,13 +89,12 @@ const AdminNotifications = () => {
   };
 
   const handleDelete = async (item) => {
-    const latest = await fetchNotifications();
-    const latestItem = latest.find((entry) => entry.id === item.id) || item;
     setDeleteConfirm({
       title: "Delete notification?",
-      message: `Delete "${latestItem.title}"? This cannot be undone.`,
-      items: [latestItem],
+      message: `Delete "${item.title}"? This cannot be undone.`,
+      items: [item],
     });
+    fetchNotifications();
   };
 
   const handleMarkAllRead = async () => {
@@ -95,7 +108,9 @@ const AdminNotifications = () => {
           })
         )
       );
-      setNotifications(notifications.map((item) => ({ ...item, read: true })));
+      const readItems = notifications.map((item) => ({ ...item, read: true }));
+      setNotifications(readItems);
+      sessionStorage.setItem(cacheKey, JSON.stringify(readItems));
     } catch (error) { console.error("Mark read error:", error); }
   };
 
@@ -104,7 +119,6 @@ const AdminNotifications = () => {
   };
 
   const handleLogout = async () => {
-    await fetchNotifications();
     localStorage.clear();
     navigate("/");
   };
@@ -228,7 +242,7 @@ const AdminNotifications = () => {
         title={deleteConfirm?.title}
         message={deleteConfirm?.message}
         busy={deleting}
-        onCancel={async () => { await fetchNotifications(); setDeleteConfirm(null); }}
+        onCancel={() => { setDeleteConfirm(null); fetchNotifications(); }}
         onConfirm={() => deleteNotifications(deleteConfirm.items)}
       />
     </div>

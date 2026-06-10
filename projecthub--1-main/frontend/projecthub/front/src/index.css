@@ -152,6 +152,10 @@ textarea {
   background: #f3f4f6 !important;
   text-align: left !important;
   overflow-x: hidden !important;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
 }
 
 .header,
@@ -232,6 +236,13 @@ textarea {
   font-size: 18px !important;
   line-height: 1.2 !important;
   font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  transform: none !important;
+}
+
+.logo h2 span {
+  color: #d6ad60 !important;
 }
 
 .menu {
@@ -251,6 +262,10 @@ textarea {
   margin: 0 0 2px !important;
   font-size: 14px !important;
   line-height: 1.2 !important;
+  max-width: 160px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .user-text p {

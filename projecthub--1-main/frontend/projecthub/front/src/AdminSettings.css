@@ -559,3 +559,29 @@
     grid-template-columns: 1fr;
   }
 }
+
+.settings-page .logo .settings-logo-title,
+.settings-page .sidebar .logo .settings-logo-title {
+  display: block !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: 150px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.settings-page .logo .settings-logo-title span,
+.settings-page .sidebar .logo .settings-logo-title span {
+  color: #d6ad60 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
