@@ -43,6 +43,19 @@ public class UserController {
     	return userService.login(authRequest);
     }
 
+    @PostMapping("/forgot-password")
+    public Map<String, Object> forgotPassword(@RequestBody Map<String, String> body) {
+        return userService.requestStudentPasswordReset(body.get("email"));
+    }
+
+    @PostMapping("/reset-password")
+    public Map<String, Object> resetPassword(@RequestBody Map<String, String> body) {
+        return userService.resetStudentPassword(
+                body.get("token"),
+                body.get("newPassword"),
+                body.get("confirmPassword"));
+    }
+
     
     // CREATE USER
     @PostMapping

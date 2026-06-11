@@ -362,6 +362,42 @@ body,
   font-size: 14px;
 }
 
+.forgot-link {
+  width: 100%;
+  margin-top: 16px;
+  border: none;
+  background: transparent;
+  color: #b98a2e;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.reset-sent-box {
+  border: 1px solid #ead8af;
+  border-radius: 14px;
+  background: #fffdf7;
+  padding: 14px 16px;
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #111827;
+  font-size: 13px;
+  text-align: left;
+}
+
+.reset-sent-box span {
+  color: #b98a2e;
+  font-weight: 700;
+  word-break: break-word;
+}
+
 /* SCROLLBAR */
 
 ::-webkit-scrollbar {

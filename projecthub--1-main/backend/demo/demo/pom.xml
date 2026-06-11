@@ -119,6 +119,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- EMAIL FOR PASSWORD RESET -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- SPRING DATA JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

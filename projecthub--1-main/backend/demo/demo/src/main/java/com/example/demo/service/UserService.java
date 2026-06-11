@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -15,6 +16,10 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +58,16 @@ public class UserService {
     private static final String ENCRYPTED_PASSWORD_PREFIX = "enc:v2:";
     private static final String LOGIN_ENCRYPTION_KEY = "ProjectHubLoginKey2026AESKey1234";
     private final Set<Long> adminNotificationSyncs = ConcurrentHashMap.newKeySet();
+    private final Map<String, PasswordResetEntry> passwordResetTokens = new ConcurrentHashMap<>();
+
+    @Value("${app.frontend-url:http://localhost:5173}")
+    private String frontendUrl;
+
+    @Value("${spring.mail.username:}")
+    private String mailFrom;
+
+    @Autowired
+    private ObjectProvider<JavaMailSender> mailSenderProvider;
 
     @Autowired
     private UserRepository userRepository;
@@ -87,6 +102,20 @@ public class UserService {
     @Autowired
     private JWTUtil jwtUtil;
 
+    private static class PasswordResetEntry {
+        private final Long userId;
+        private final LocalDateTime expiresAt;
+
+        private PasswordResetEntry(Long userId, LocalDateTime expiresAt) {
+            this.userId = userId;
+            this.expiresAt = expiresAt;
+        }
+    }
+
+    private String normalizeEmail(String email) {
+        return email == null ? null : email.trim().toLowerCase();
+    }
+
     // =========================================
     // STUDENT PROFILE
     // =========================================
@@ -106,7 +135,7 @@ public class UserService {
                 user.setFullName(updatedStudent.getUser().getFullName());
             }
             if (updatedStudent.getUser().getEmail() != null) {
-                user.setEmail(updatedStudent.getUser().getEmail());
+                user.setEmail(normalizeEmail(updatedStudent.getUser().getEmail()));
             }
             userRepository.save(user);
         }
@@ -139,7 +168,7 @@ public class UserService {
                 user.setFullName((String) userMap.get("fullName"));
             }
             if (userMap.get("email") != null) {
-                user.setEmail((String) userMap.get("email"));
+                user.setEmail(normalizeEmail((String) userMap.get("email")));
             }
             userRepository.save(user);
         }
@@ -195,7 +224,7 @@ public class UserService {
                 user.setFullName((String) userMap.get("fullName"));
             }
             if (userMap.get("email") != null) {
-                user.setEmail((String) userMap.get("email"));
+                user.setEmail(normalizeEmail((String) userMap.get("email")));
             }
             userRepository.save(user);
         }
@@ -215,6 +244,7 @@ public class UserService {
     // =========================================
 
     public User register(User user) {
+        user.setEmail(normalizeEmail(user.getEmail()));
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new ResponseStatusException(
@@ -261,9 +291,10 @@ public class UserService {
     // =========================================
 
     public String login(LoginRequest request) {
+        String email = normalizeEmail(request.getEmail());
 
         User user = userRepository
-                .findByEmail(request.getEmail())
+                .findByEmailNormalized(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
                         "Invalid email or password"
@@ -281,11 +312,84 @@ public class UserService {
         return jwtUtil.generateToken(user.getEmail(), user.getRole());
     }
 
+    public Map<String, Object> requestStudentPasswordReset(String email) {
+        String normalizedEmail = normalizeEmail(email);
+        User user = userRepository.findByEmailNormalized(normalizedEmail)
+                .filter(foundUser -> "STUDENT".equalsIgnoreCase(foundUser.getRole()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Enter valid mail"));
+
+        String token = java.util.UUID.randomUUID().toString().replace("-", "");
+        passwordResetTokens.put(token, new PasswordResetEntry(user.getId(), LocalDateTime.now().plusMinutes(30)));
+
+        String resetLink = frontendUrl.replaceAll("/$", "") + "/reset-password?token=" + token;
+        boolean emailSent = sendPasswordResetEmail(user.getEmail(), resetLink);
+
+        String message = emailSent
+                ? "Reset password link is sent to " + user.getEmail()
+                : "Email is not configured. Use this reset link.";
+
+        return Map.of(
+                "message", message,
+                "email", user.getEmail(),
+                "resetLink", resetLink,
+                "emailSent", emailSent);
+    }
+
+    public Map<String, Object> resetStudentPassword(String token, String newPassword, String confirmPassword) {
+        if (token == null || token.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset link");
+        }
+        if (newPassword == null || newPassword.isBlank() || newPassword.length() < 6) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be at least 6 characters");
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
+        }
+
+        PasswordResetEntry entry = passwordResetTokens.get(token);
+        if (entry == null || entry.expiresAt.isBefore(LocalDateTime.now())) {
+            passwordResetTokens.remove(token);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset link expired");
+        }
+
+        User user = userRepository.findById(entry.userId)
+                .filter(foundUser -> "STUDENT".equalsIgnoreCase(foundUser.getRole()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset link"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        passwordResetTokens.remove(token);
+
+        return Map.of("message", "Password changed successfully");
+    }
+
+    private boolean sendPasswordResetEmail(String email, String resetLink) {
+        JavaMailSender mailSender = mailSenderProvider.getIfAvailable();
+        if (mailSender == null || mailFrom == null || mailFrom.isBlank()) {
+            return false;
+        }
+
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(mailFrom);
+            message.setTo(email);
+            message.setSubject("ProjectHub Password Reset");
+            message.setText("Click this link to reset your ProjectHub password:\n\n" + resetLink
+                    + "\n\nThis link will expire in 30 minutes.");
+            mailSender.send(message);
+            return true;
+        } catch (Exception error) {
+            System.err.println("Password reset email failed: " + error.getMessage());
+            return false;
+        }
+    }
+
     // =========================================
     // CREATE USER
     // =========================================
 
     public User createUser(User user) {
+        user.setEmail(normalizeEmail(user.getEmail()));
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new ResponseStatusException(
@@ -378,7 +482,7 @@ public class UserService {
                 ));
 
         user.setFullName(updatedUser.getFullName());
-        user.setEmail(updatedUser.getEmail());
+        user.setEmail(normalizeEmail(updatedUser.getEmail()));
 
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
@@ -406,7 +510,7 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (body.containsKey("fullName")) user.setFullName((String) body.get("fullName"));
-        if (body.containsKey("email")) user.setEmail((String) body.get("email"));
+        if (body.containsKey("email")) user.setEmail(normalizeEmail((String) body.get("email")));
         if (body.containsKey("role")) user.setRole((String) body.get("role"));
 
         User updated = userRepository.save(user);
@@ -694,9 +798,10 @@ public class UserService {
     // =========================================
 
     public AuthResponse login(AuthRequest request) {
+        String email = normalizeEmail(request.getEmail());
 
         User user = userRepository
-                .findByEmail(request.getEmail())
+                .findByEmailNormalized(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
                         "Invalid email or password"
@@ -797,7 +902,7 @@ public class UserService {
                 try {
                     User user = new User();
                     user.setFullName(fullName);
-                    user.setEmail(email);
+                    user.setEmail(normalizeEmail(email));
                     user.setPassword(password);
                     user.setRole(role.isBlank() ? "STUDENT" : role.toUpperCase());
 

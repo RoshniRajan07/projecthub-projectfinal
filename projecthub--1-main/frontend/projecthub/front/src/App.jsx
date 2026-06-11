@@ -8,6 +8,7 @@ import "./AppToast.css";
 
 import Home from "./Home";
 import Login from "./Login";
+import ResetPassword from "./ResetPassword";
 
 import Dashboard from "./Dashboard";
 import SubmitProject from "./SubmitProject";
@@ -70,6 +71,11 @@ function App() {
         <Route
           path="/login"
           element={<Login />}
+        />
+
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />}
         />
 
         {/* STUDENT */}

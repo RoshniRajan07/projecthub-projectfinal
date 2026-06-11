@@ -66,6 +66,10 @@ extends OncePerRequestFilter {
 
             (path.equals("/users/login")
 
+            || path.equals("/users/forgot-password")
+
+            || path.equals("/users/reset-password")
+
             || path.equals("/auth/login")
 
             || path.equals("/auth/register")

@@ -30,6 +30,17 @@ const encryptLoginPassword = async (plainPassword) => {
   return `enc:v2:${bytesToBase64(iv)}:${bytesToBase64(new Uint8Array(encrypted))}`;
 };
 
+const getErrorMessage = (data, fallback) => {
+  const message = data?.message || data?.error || "";
+  if (message.includes("Unable to send reset email")) {
+    return "Email could not be sent. Please check Gmail app password or try again.";
+  }
+  if (message.includes("INTERNAL_SERVER_ERROR")) {
+    return fallback;
+  }
+  return message || fallback;
+};
+
 export default function Login() {
 
   const navigate = useNavigate();
@@ -40,6 +51,8 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
+  const [resetSent, setResetSent] = useState(null);
 
   useEffect(() => {
     setEmail("");
@@ -59,16 +72,17 @@ export default function Login() {
     setLoading(true);
 
     try {
+      const normalizedEmail = email.trim();
       const encryptedPassword = await encryptLoginPassword(password);
       const response = await fetch("http://localhost:8081/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: encryptedPassword }),
+        body: JSON.stringify({ email: normalizedEmail, password: encryptedPassword }),
       });
 
       if (!response.ok) {
-        const err = await response.json();
-        setError(err.message || "Invalid email or password");
+        const err = await response.json().catch(() => ({}));
+        setError(getErrorMessage(err, "Invalid email or password"));
         setLoading(false);
         return;
       }
@@ -94,6 +108,34 @@ export default function Login() {
         }
       }, 900);
 
+    } catch {
+      setError("Server not reachable. Please try again.");
+    }
+
+    setLoading(false);
+  };
+
+  const handleForgotPassword = async () => {
+    setError("");
+    setResetSent(null);
+    setLoading(true);
+
+    try {
+      const normalizedEmail = email.trim();
+      const response = await fetch("http://localhost:8081/users/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: normalizedEmail }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setError(getErrorMessage(data, "Enter valid mail"));
+        setLoading(false);
+        return;
+      }
+
+      setResetSent(data);
     } catch {
       setError("Server not reachable. Please try again.");
     }
@@ -136,13 +178,15 @@ export default function Login() {
       {/* RIGHT SIDE */}
       <div className="login-right">
 
-        <h2>Welcome back</h2>
-        <p className="subtitle">Sign in to your account to continue</p>
+        <h2>{forgotMode ? "Forgot password" : "Welcome back"}</h2>
+        <p className="subtitle">
+          {forgotMode ? "Enter your registered student email" : "Sign in to your account to continue"}
+        </p>
 
 
 
         {/* FORM */}
-        <form className="form" autoComplete="off" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+        <form className="form" autoComplete="off" onSubmit={(e) => { e.preventDefault(); forgotMode ? handleForgotPassword() : handleLogin(); }}>
 
           <label>Email</label>
           <input
@@ -159,28 +203,47 @@ export default function Login() {
             onFocus={(e) => { e.currentTarget.readOnly = false; }}
           />
 
-          <label>Password</label>
-          <div className="password-box">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              name="projecthub-login-passcode"
-              data-lpignore="true"
-              data-1p-ignore="true"
-              spellCheck="false"
-              readOnly
-              onFocus={(e) => { e.currentTarget.readOnly = false; }}
-            />
-            <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </span>
-          </div>
+          {!forgotMode && (
+            <>
+              <label>Password</label>
+              <div className="password-box">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                  name="projecthub-login-passcode"
+                  data-lpignore="true"
+                  data-1p-ignore="true"
+                  spellCheck="false"
+                  readOnly
+                  onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                />
+                <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </span>
+              </div>
+            </>
+          )}
 
           {/* ERROR MESSAGE */}
           {error && <p style={{ color: "red", fontSize: "13px", marginTop: "8px" }}>{error}</p>}
+          {resetSent && (
+            <div className="reset-sent-box">
+              <strong>{resetSent.message || "Reset password link is ready"}</strong>
+              <span>{resetSent.email}</span>
+              {resetSent.resetLink && (
+                <button
+                  type="button"
+                  className="forgot-link"
+                  onClick={() => window.location.href = resetSent.resetLink}
+                >
+                  Open Reset Link
+                </button>
+              )}
+            </div>
+          )}
 
           {/* LOGIN BUTTON */}
           <button
@@ -188,7 +251,19 @@ export default function Login() {
             className="login-btn"
             disabled={loading}
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? (forgotMode ? "Sending..." : "Signing in...") : (forgotMode ? "Send Reset Link" : "Sign In")}
+          </button>
+
+          <button
+            type="button"
+            className="forgot-link"
+            onClick={() => {
+              setForgotMode(!forgotMode);
+              setError("");
+              setResetSent(null);
+            }}
+          >
+            {forgotMode ? "Back to Sign In" : "Forgot password?"}
           </button>
 
           <p className="demo">
