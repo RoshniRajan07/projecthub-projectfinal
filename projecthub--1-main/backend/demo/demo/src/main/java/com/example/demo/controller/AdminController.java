@@ -55,5 +55,7 @@ public class AdminController {
     public Map<String, Long> getDashboardData() {
 
         return projectService.getDashboardData();
+        
+
     }
 }
