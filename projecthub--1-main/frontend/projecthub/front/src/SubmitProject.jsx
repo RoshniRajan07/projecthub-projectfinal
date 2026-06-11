@@ -190,6 +190,13 @@ export default function SubmitProject() {
     return latest.find((item) => item.id === id) || submissions.find((item) => item.id === id);
   };
 
+  const getStudentStatus = (status) => {
+    const normalized = status?.toLowerCase() || "pending";
+    return normalized === "resubmitted" ? "pending" : normalized;
+  };
+
+  const canDownloadFeedback = (status) => ["approved", "rejected"].includes(status?.toLowerCase());
+
   const openNewSubmission = async () => {
     await Promise.all([fetchFaculty(), fetchDeadlineRules()]);
     setActiveTab("new");
@@ -586,11 +593,11 @@ export default function SubmitProject() {
                   </div>
                 </div>
                 <div className="history-right">
-                  <span className={`status ${item.status?.toLowerCase()}`}>
-                    {item.status?.toLowerCase()}
-                  </span>
                   <span className="date">
                     {item.submittedDate ? new Date(item.submittedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : ""}
+                  </span>
+                  <span className={`status ${getStudentStatus(item.status)}`}>
+                    {getStudentStatus(item.status)}
                   </span>
 
                   <button className="icon-btn" onClick={() => handleViewProject(item)}>
@@ -627,6 +634,9 @@ export default function SubmitProject() {
               </button>
               <h2>{selectedProject.title}</h2>
               <div className="view-grid">
+                <p><strong>Submitted:</strong> {selectedProject.submittedDate ? new Date(selectedProject.submittedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "-"}</p>
+                <p><strong>Last Date for Submission:</strong> {formatLastDate(selectedProject)}</p>
+                <p><strong>Last Updated:</strong> {selectedProject.updatedDate ? new Date(selectedProject.updatedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : selectedProject.submittedDate ? new Date(selectedProject.submittedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "-"}</p>
                 <p><strong>Student ID:</strong> {selectedProject.studentId || userId}</p>
                 <p><strong>Student:</strong> {selectedProject.studentName || fullName}</p>
                 <p><strong>Subject:</strong> {selectedProject.subject}</p>
@@ -634,13 +644,10 @@ export default function SubmitProject() {
                 <p><strong>Version:</strong> v{selectedProject.version || 1}</p>
                 <p>
                   <strong>Status:</strong>{" "}
-                  <span className={`status ${selectedProject.status?.toLowerCase()}`}>
-                    {selectedProject.status?.toLowerCase()}
+                  <span className={`status ${getStudentStatus(selectedProject.status)}`}>
+                    {getStudentStatus(selectedProject.status)}
                   </span>
                 </p>
-                <p><strong>Submitted:</strong> {selectedProject.submittedDate ? new Date(selectedProject.submittedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "-"}</p>
-                <p><strong>Last Date for Submission:</strong> {formatLastDate(selectedProject)}</p>
-                <p><strong>Last Updated:</strong> {selectedProject.updatedDate ? new Date(selectedProject.updatedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : selectedProject.submittedDate ? new Date(selectedProject.submittedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "-"}</p>
                 <p><strong>Faculty:</strong> {selectedProject.facultyName || "-"}</p>
                 {selectedProject.grade && <p><strong>Grade:</strong> {selectedProject.grade}</p>}
               </div>
@@ -678,6 +685,11 @@ export default function SubmitProject() {
                   <h4>Faculty Feedback</h4>
                   <div className="feedback-box">{selectedProject.feedback}</div>
                 </div>
+              )}
+              {canDownloadFeedback(selectedProject.status) && (
+                <button className="download-feedback-btn" onClick={() => handleDownloadFeedback(selectedProject)}>
+                  <Download size={16} /> Download Feedback
+                </button>
               )}
             </div>
           </div>

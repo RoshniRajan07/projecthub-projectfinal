@@ -427,6 +427,13 @@ input[type="date"]::-webkit-outer-spin-button {
   background: #f3dfb7;
 }
 
+.compact-feedback-btn {
+  min-height: 36px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  white-space: nowrap !important;
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .sidebar {

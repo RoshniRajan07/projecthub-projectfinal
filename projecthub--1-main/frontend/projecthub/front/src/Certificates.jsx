@@ -172,6 +172,13 @@ const Certificates = () => {
     return latest.find((item) => item.id === id) || certificateList.find((item) => item.id === id);
   };
 
+  const getStudentStatus = (status) => {
+    const normalized = status?.toLowerCase() || "pending";
+    return normalized === "resubmitted" ? "pending" : normalized;
+  };
+
+  const canDownloadFeedback = (status) => ["approved", "rejected"].includes(status?.toLowerCase());
+
   const openUploadModal = async () => {
     await Promise.all([fetchFaculty(), fetchDeadlineRules()]);
     setCertificateData({ title: "", organization: "", category: "", issueDate: "", faculty: "", file: null });
@@ -431,8 +438,8 @@ const Certificates = () => {
                 </div>
               </div>
               <div className="certificate-right">
-                <span className={`status ${item.status?.toLowerCase()}`}>{item.status?.toLowerCase()}</span>
                 <span className="date">{item.issueDate || "-"}</span>
+                <span className={`status ${getStudentStatus(item.status)}`}>{getStudentStatus(item.status)}</span>
 
                 <Eye className="action-icon" size={18} onClick={() => handleOpenView(item)} style={{ cursor: "pointer" }} title="View" />
 
@@ -462,19 +469,19 @@ const Certificates = () => {
             </button>
             <h2>{selectedCert.title}</h2>
             <div className="view-grid">
-              <p><strong>Student ID:</strong> {selectedCert.studentId || userId}</p>
-              <p><strong>Student:</strong> {selectedCert.studentName || fullName}</p>
-              <p><strong>Organization:</strong> {selectedCert.organization}</p>
-              <p><strong>Category:</strong> {selectedCert.category}</p>
               <p><strong>Issue Date:</strong> {selectedCert.issueDate || "-"}</p>
               <p><strong>Submitted:</strong> {formatDate(selectedCert.submittedDate || selectedCert.uploadDate)}</p>
               <p><strong>Last Date for Submission:</strong> {formatLastDate(selectedCert)}</p>
               <p><strong>Last Updated:</strong> {formatDate(selectedCert.updatedDate || selectedCert.submittedDate || selectedCert.uploadDate)}</p>
+              <p><strong>Student ID:</strong> {selectedCert.studentId || userId}</p>
+              <p><strong>Student:</strong> {selectedCert.studentName || fullName}</p>
+              <p><strong>Organization:</strong> {selectedCert.organization}</p>
+              <p><strong>Category:</strong> {selectedCert.category}</p>
               <p><strong>Faculty:</strong> {selectedCert.facultyName || "-"}</p>
               <p>
                 <strong>Status:</strong>{" "}
-                <span className={`status ${selectedCert.status?.toLowerCase()}`}>
-                  {selectedCert.status?.toLowerCase()}
+                <span className={`status ${getStudentStatus(selectedCert.status)}`}>
+                  {getStudentStatus(selectedCert.status)}
                 </span>
               </p>
             </div>
@@ -497,6 +504,11 @@ const Certificates = () => {
                 <h4>Faculty Feedback</h4>
                 <div className="feedback-box">{selectedCert.remarks}</div>
               </div>
+            )}
+            {canDownloadFeedback(selectedCert.status) && (
+              <button className="download-feedback-btn" onClick={() => handleDownloadFeedback(selectedCert)}>
+                <Download size={16} /> Download Feedback
+              </button>
             )}
           </div>
         </div>

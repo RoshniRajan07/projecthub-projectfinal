@@ -450,12 +450,14 @@
 .assigned-page .user-section {
   padding-top: 18px !important;
   margin-top: auto !important;
+  min-height: 112px !important;
 }
 
 .assigned-page .user {
   align-items: center !important;
   gap: 12px !important;
   padding-left: 0 !important;
+  min-height: 42px !important;
 }
 
 .assigned-page .avatar {
@@ -466,12 +468,18 @@
 
 .assigned-page .user-text h4 {
   font-size: 15px !important;
+  line-height: 1.2 !important;
   margin: 0 !important;
+  max-width: 160px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .assigned-page .user-text p {
   font-size: 12px !important;
   line-height: normal !important;
+  margin: 0 !important;
 }
 
 .assigned-page .logout {

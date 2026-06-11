@@ -77,6 +77,10 @@ export default function Dashboard() {
     : analytics;
 
   const verifiedCerts = certificates.filter(c => c.status?.toLowerCase() === "approved").length;
+  const getStudentStatus = (status) => {
+    const normalized = status?.toLowerCase() || "pending";
+    return normalized === "resubmitted" ? "pending" : normalized;
+  };
 
   const handleExportPDF = async () => {
     const headers = { Authorization: `Bearer ${token}` };
@@ -291,7 +295,7 @@ export default function Dashboard() {
               </div>
 
               <div className="right">
-                <span className={`status ${p.status?.toLowerCase()}`}>{p.status?.toLowerCase()}</span>
+                <span className={`status ${getStudentStatus(p.status)}`}>{getStudentStatus(p.status)}</span>
                 <span className="date">
                   {p.submittedDate ? new Date(p.submittedDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : ""}
                 </span>
@@ -320,7 +324,7 @@ export default function Dashboard() {
                     <h4>{c.title}</h4>
                     <p>{c.organization}</p>
                   </div>
-                  <span className={`status ${c.status?.toLowerCase()}`}>{c.status?.toLowerCase()}</span>
+                  <span className={`status ${getStudentStatus(c.status)}`}>{getStudentStatus(c.status)}</span>
                 </div>
               ))}
             </div>

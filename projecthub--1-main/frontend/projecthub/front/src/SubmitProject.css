@@ -1111,6 +1111,13 @@
   margin:10px auto 0;
   padding:0 16px;
 }
+
+.compact-feedback-btn {
+  min-height: 36px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  white-space: nowrap !important;
+}
 /* ✅ Upload box - center align fix */
 .upload-box {
   display: flex !important;

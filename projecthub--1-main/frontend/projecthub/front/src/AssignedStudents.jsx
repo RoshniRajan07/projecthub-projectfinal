@@ -16,10 +16,26 @@ const AssignedStudents = () => {
   const [token] = useState(() => localStorage.getItem("token"));
   const [userId] = useState(() => localStorage.getItem("userId"));
   const [fullName] = useState(() => localStorage.getItem("fullName") || "Faculty");
+  const studentCacheKey = userId ? `assignedStudents:${userId}` : "assignedStudents";
+  const projectCacheKey = userId ? `assignedProjects:${userId}` : "assignedProjects";
 
-  const [students, setStudents] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [students, setStudents] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem(studentCacheKey);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [projects, setProjects] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem(projectCacheKey);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => students.length === 0);
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
@@ -36,26 +52,32 @@ const AssignedStudents = () => {
   const fetchData = useCallback(async () => {
     const headers = { Authorization: `Bearer ${token}` };
     try {
-      let studentData = [];
-      let projectData = [];
-      const [studRes, projRes] = await Promise.all([
-        fetch(`${API}/users/faculty/${userId}/students`, { headers }),
-        fetch(`${API}/projects/mongo/faculty/${userId}`, { headers })
-      ]);
-      if (studRes.ok) {
-        studentData = await studRes.json();
-        setStudents(studentData);
-      }
-      if (projRes.ok) {
-        projectData = await projRes.json();
-        setProjects(projectData);
-      }
+      const studentRequest = fetch(`${API}/users/faculty/${userId}/students`, { headers })
+        .then(async (res) => {
+          if (!res.ok) return [];
+          const data = await res.json();
+          setStudents(data);
+          sessionStorage.setItem(studentCacheKey, JSON.stringify(data));
+          setLoading(false);
+          return data;
+        });
+
+      const projectRequest = fetch(`${API}/projects/mongo/faculty/${userId}`, { headers })
+        .then(async (res) => {
+          if (!res.ok) return [];
+          const data = await res.json();
+          setProjects(data);
+          sessionStorage.setItem(projectCacheKey, JSON.stringify(data));
+          return data;
+        });
+
+      const [studentData, projectData] = await Promise.all([studentRequest, projectRequest]);
       setLoading(false);
       return { students: studentData, projects: projectData };
     } catch (error) { console.error("Fetch assigned students error:", error); }
     setLoading(false);
     return { students: [], projects: [] };
-  }, [token, userId]);
+  }, [token, userId, studentCacheKey, projectCacheKey]);
 
   useEffect(() => {
     if (!token || !userId) { navigate("/"); return; }
