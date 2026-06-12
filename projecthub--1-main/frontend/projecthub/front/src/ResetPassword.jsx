@@ -3,12 +3,24 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Login.css";
 
+const API = "http://localhost:8081";
+
 const getErrorMessage = (data, fallback) => {
   const message = data?.message || data?.error || "";
+  if (message === "Bad Request" || message === "Unauthorized") {
+    return fallback;
+  }
   if (message.includes("INTERNAL_SERVER_ERROR")) {
     return fallback;
   }
   return message || fallback;
+};
+
+const trackAuthAction = (action) => {
+  fetch(`${API}/landing/click?action=${encodeURIComponent(action)}`, {
+    method: "GET",
+    keepalive: true,
+  }).catch(() => {});
 };
 
 export default function ResetPassword() {
@@ -27,15 +39,11 @@ export default function ResetPassword() {
   const handleChangePassword = async () => {
     setError("");
     setMessage("");
-
-    if (!newPassword || !confirmPassword) {
-      setError("Enter new password and confirm password");
-      return;
-    }
+    const isMissingPasswordInput = !newPassword || !confirmPassword;
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8081/users/reset-password", {
+      const response = await fetch(`${API}/users/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, newPassword, confirmPassword }),
@@ -43,15 +51,19 @@ export default function ResetPassword() {
 
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setError(getErrorMessage(data, "Password change failed"));
+        setError(isMissingPasswordInput ? "Enter new password and confirm password" : getErrorMessage(data, "Password change failed"));
         setLoading(false);
         return;
       }
 
-      setMessage(data.message || "Password changed successfully");
-      setTimeout(() => navigate("/login"), 1200);
+      if (isMissingPasswordInput) {
+        setError("Enter new password and confirm password");
+      } else {
+        setMessage(data.message || "Password changed successfully");
+        setTimeout(() => navigate("/login"), 1200);
+      }
     } catch {
-      setError("Server not reachable. Please try again.");
+      setError(isMissingPasswordInput ? "Enter new password and confirm password" : "Server not reachable. Please try again.");
     }
     setLoading(false);
   };
@@ -106,7 +118,14 @@ export default function ResetPassword() {
             {loading ? "Changing..." : "Change Password"}
           </button>
 
-          <button type="button" className="forgot-link" onClick={() => navigate("/login")}>
+          <button
+            type="button"
+            className="forgot-link"
+            onClick={() => {
+              trackAuthAction("reset_back_to_signin_click");
+              navigate("/login");
+            }}
+          >
             Back to Sign In
           </button>
         </form>

@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const LOGIN_ENCRYPTION_KEY = "ProjectHubLoginKey2026AESKey1234";
+const API = "http://localhost:8081";
 
 const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...bytes));
 
@@ -32,6 +33,9 @@ const encryptLoginPassword = async (plainPassword) => {
 
 const getErrorMessage = (data, fallback) => {
   const message = data?.message || data?.error || "";
+  if (message === "Unauthorized" || message === "Bad Request") {
+    return fallback;
+  }
   if (message.includes("Unable to send reset email")) {
     return "Email could not be sent. Please check Gmail app password or try again.";
   }
@@ -39,6 +43,13 @@ const getErrorMessage = (data, fallback) => {
     return fallback;
   }
   return message || fallback;
+};
+
+const trackAuthAction = (action) => {
+  fetch(`${API}/landing/click?action=${encodeURIComponent(action)}`, {
+    method: "GET",
+    keepalive: true,
+  }).catch(() => {});
 };
 
 export default function Login() {
@@ -69,12 +80,13 @@ export default function Login() {
   const handleLogin = async () => {
 
     setError("");
-    setLoading(true);
+    const normalizedEmail = email.trim();
+    const isMissingLoginInput = !normalizedEmail || !password.trim();
 
+    setLoading(true);
     try {
-      const normalizedEmail = email.trim();
       const encryptedPassword = await encryptLoginPassword(password);
-      const response = await fetch("http://localhost:8081/users/login", {
+      const response = await fetch(`${API}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: normalizedEmail, password: encryptedPassword }),
@@ -82,7 +94,7 @@ export default function Login() {
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        setError(getErrorMessage(err, "Invalid email or password"));
+        setError(isMissingLoginInput ? "Enter your email and password" : getErrorMessage(err, "Invalid email or password"));
         setLoading(false);
         return;
       }
@@ -109,7 +121,7 @@ export default function Login() {
       }, 900);
 
     } catch {
-      setError("Server not reachable. Please try again.");
+      setError(isMissingLoginInput ? "Enter your email and password" : "Server not reachable. Please try again.");
     }
 
     setLoading(false);
@@ -118,11 +130,12 @@ export default function Login() {
   const handleForgotPassword = async () => {
     setError("");
     setResetSent(null);
-    setLoading(true);
+    const normalizedEmail = email.trim();
+    const isMissingEmail = !normalizedEmail;
 
+    setLoading(true);
     try {
-      const normalizedEmail = email.trim();
-      const response = await fetch("http://localhost:8081/users/forgot-password", {
+      const response = await fetch(`${API}/users/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: normalizedEmail }),
@@ -130,14 +143,18 @@ export default function Login() {
 
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setError(getErrorMessage(data, "Enter valid mail"));
+        setError(isMissingEmail ? "Enter your email" : getErrorMessage(data, "Enter valid mail"));
         setLoading(false);
         return;
       }
 
-      setResetSent(data);
+      if (isMissingEmail) {
+        setError("Enter your email");
+      } else {
+        setResetSent(data);
+      }
     } catch {
-      setError("Server not reachable. Please try again.");
+      setError(isMissingEmail ? "Enter your email" : "Server not reachable. Please try again.");
     }
 
     setLoading(false);
@@ -237,7 +254,10 @@ export default function Login() {
                 <button
                   type="button"
                   className="forgot-link"
-                  onClick={() => window.location.href = resetSent.resetLink}
+                  onClick={() => {
+                    trackAuthAction("reset_password_link_click");
+                    window.location.href = resetSent.resetLink;
+                  }}
                 >
                   Open Reset Link
                 </button>
@@ -258,6 +278,7 @@ export default function Login() {
             type="button"
             className="forgot-link"
             onClick={() => {
+              trackAuthAction(forgotMode ? "back_to_signin_click" : "forgot_password_click");
               setForgotMode(!forgotMode);
               setError("");
               setResetSent(null);
