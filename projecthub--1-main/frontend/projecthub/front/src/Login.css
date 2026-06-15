@@ -378,24 +378,12 @@ body,
   text-decoration: underline;
 }
 
-.reset-sent-box {
-  border: 1px solid #ead8af;
-  border-radius: 14px;
-  background: #fffdf7;
-  padding: 14px 16px;
-  margin: 0 0 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  color: #111827;
+.form .reset-sent-message {
+  color: #15803d;
   font-size: 13px;
-  text-align: left;
-}
-
-.reset-sent-box span {
-  color: #b98a2e;
-  font-weight: 700;
-  word-break: break-word;
+  font-weight: 600;
+  margin: 0 0 18px;
+  text-align: center;
 }
 
 /* SCROLLBAR */

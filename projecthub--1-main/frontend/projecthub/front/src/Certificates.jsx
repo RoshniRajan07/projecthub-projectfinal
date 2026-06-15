@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./Certificates.css";
-import jsPDF from "jspdf";
 import {
   LayoutDashboard, Upload, Award, User, Bell, LogOut,
   Download, Trash2, Plus, RotateCcw, Pencil, ChevronDown, Calendar, Eye, X, Menu
@@ -8,6 +7,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import ConfirmToast from "./ConfirmToast";
 import Toast from "./Toast";
+import { buildDownloadUrl, downloadUploadedFile } from "./fileDownloads";
+import { downloadCertificateFeedbackReport } from "./pdfReports";
 
 const API = "http://localhost:8081";
 
@@ -29,6 +30,7 @@ const Certificates = () => {
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState({ open: false, message: "", type: "error" });
   const showToast = (message, type = "error") => setToast({ open: true, message, type });
+  const [missingCertificateFiles, setMissingCertificateFiles] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [facultyList, setFacultyList] = useState([]);
   const [deadlineRules, setDeadlineRules] = useState([]);
@@ -248,7 +250,7 @@ const Certificates = () => {
         });
         if (!uploadRes.ok) { showToast("File upload failed"); setSubmitting(false); return; }
         fileName = await uploadRes.text();
-        fileURL = `${API}/projects/download/${fileName}`;
+        fileURL = buildDownloadUrl(API, fileName);
       }
 
       const selectedFaculty = facultyList.find(f => f.id.toString() === faculty);
@@ -334,38 +336,28 @@ const Certificates = () => {
 
   const handleViewCertificate = async (item) => {
     const latestCert = await getLatestCertificate(item.id) || item;
-    if (!latestCert.fileURL) { showToast("File not found"); return; }
+    if (!latestCert.fileName && !latestCert.fileURL) { showToast("File not found"); return; }
     try {
-      const res = await fetch(latestCert.fileURL);
-      if (!res.ok) { showToast("Download failed"); return; }
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = latestCert.fileName || latestCert.fileURL.split("/").pop() || "certificate";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      await downloadUploadedFile({
+        apiBase: API,
+        fileName: latestCert.fileName,
+        fileUrl: latestCert.fileURL,
+        token,
+        fallbackName: "certificate-file",
+      });
+      setMissingCertificateFiles((prev) => ({ ...prev, [latestCert.id]: false }));
     } catch (error) {
       console.error("Download error:", error);
-      showToast("Download failed");
+      if (error.status === 404) {
+        setMissingCertificateFiles((prev) => ({ ...prev, [latestCert.id]: true }));
+      }
+      showToast(error.message || "Download failed");
     }
   };
 
   const handleDownloadFeedback = async (cert) => {
     const latestCert = await getLatestCertificate(cert.id) || cert;
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Certificate Feedback Report", 20, 20);
-    doc.setFontSize(13);
-    doc.text(`Certificate : ${latestCert.title}`, 20, 50);
-    doc.text(`Organization : ${latestCert.organization}`, 20, 65);
-    doc.text(`Category : ${latestCert.category}`, 20, 80);
-    doc.text(`Status : ${latestCert.status}`, 20, 95);
-    doc.text("Faculty Feedback", 20, 125);
-    doc.text(latestCert.remarks || "No feedback yet.", 20, 145);
-    doc.save(`${latestCert.title}_Feedback.pdf`);
+    downloadCertificateFeedbackReport(latestCert);
   };
 
   const formatDate = (value) =>
@@ -494,8 +486,12 @@ const Certificates = () => {
                     <p>{selectedCert.fileName}</p>
                   </div>
                 </div>
-                <button className="file-action-btn" onClick={() => handleViewCertificate(selectedCert)}>
-                  <Download size={16} /> Download
+                <button
+                  className="file-action-btn"
+                  onClick={() => handleViewCertificate(selectedCert)}
+                  disabled={missingCertificateFiles[selectedCert.id]}
+                >
+                  <Download size={16} /> {missingCertificateFiles[selectedCert.id] ? "File missing" : "Download"}
                 </button>
               </div>
             )}

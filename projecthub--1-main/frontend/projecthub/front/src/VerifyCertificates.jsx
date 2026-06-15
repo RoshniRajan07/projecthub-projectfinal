@@ -6,6 +6,7 @@ import {
   Award, Search, ChevronDown, Eye, Download, X,
   ChevronLeft, ChevronRight, Menu
 } from "lucide-react";
+import { downloadUploadedFile } from "./fileDownloads";
 
 const API = "http://localhost:8081";
 const ITEMS_PER_PAGE = 5;
@@ -98,20 +99,16 @@ export default function VerifyCertificates() {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const handleDownload = async (fileURL) => {
-    if (!fileURL) { alert("File not found"); return; }
+  const handleDownload = async (certificate) => {
+    if (!certificate?.fileName && !certificate?.fileURL) { alert("File not found"); return; }
     try {
-      const res = await fetch(fileURL);
-      if (!res.ok) { alert("Download failed: file not found"); return; }
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileURL.split("/").pop() || "certificate";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      await downloadUploadedFile({
+        apiBase: API,
+        fileName: certificate.fileName,
+        fileUrl: certificate.fileURL,
+        token,
+        fallbackName: "certificate-file",
+      });
     } catch (err) {
       console.error("Download error:", err);
       alert("Download failed");
@@ -325,8 +322,8 @@ export default function VerifyCertificates() {
               </div>
             </div>
 
-            {selectedCertificate.fileURL && (
-              <button className="download-file-btn" onClick={() => handleDownload(selectedCertificate.fileURL)}>
+            {(selectedCertificate.fileName || selectedCertificate.fileURL) && (
+              <button className="download-file-btn" onClick={() => handleDownload(selectedCertificate)}>
                 <Download size={20} /> Download Certificate File
               </button>
             )}

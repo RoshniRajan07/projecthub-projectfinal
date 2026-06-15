@@ -407,6 +407,12 @@ input[type="date"]::-webkit-outer-spin-button {
   flex-shrink: 0;
 }
 
+.file-action-btn:disabled {
+  background: #9ca3af;
+  color: #f9fafb;
+  cursor: not-allowed;
+}
+
 .download-feedback-btn {
   display: flex;
   align-items: center;

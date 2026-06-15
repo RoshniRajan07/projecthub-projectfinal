@@ -324,15 +324,13 @@ public class UserService {
         String resetLink = frontendUrl.replaceAll("/$", "") + "/reset-password?token=" + token;
         boolean emailSent = sendPasswordResetEmail(user.getEmail(), resetLink);
 
-        String message = emailSent
-                ? "Reset password link is sent to " + user.getEmail()
-                : "Email is not configured. Use this reset link.";
+        if (!emailSent) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to send reset email");
+        }
 
         return Map.of(
-                "message", message,
-                "email", user.getEmail(),
-                "resetLink", resetLink,
-                "emailSent", emailSent);
+                "message", "Reset password link is sent to " + user.getEmail(),
+                "email", user.getEmail());
     }
 
     public Map<String, Object> resetStudentPassword(String token, String newPassword, String confirmPassword) {

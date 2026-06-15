@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Toast from "./Toast";
+import { downloadUploadedFile } from "./fileDownloads";
 
 const API = "http://localhost:8081";
 const ITEMS_PER_PAGE = 5;
@@ -158,19 +159,15 @@ const ReviewProjects = () => {
 
   const handleDownloadProjectFile = async (project) => {
     const latestProject = await getLatestProject(project.id) || project;
-    if (!latestProject.fileName) { showToast("File not found"); return; }
+    if (!latestProject.fileName && !latestProject.fileURL) { showToast("File not found"); return; }
     try {
-      const res = await fetch(`${API}/projects/download/${latestProject.fileName}`);
-      if (!res.ok) { showToast("Download failed"); return; }
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = latestProject.fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      await downloadUploadedFile({
+        apiBase: API,
+        fileName: latestProject.fileName,
+        fileUrl: latestProject.fileURL,
+        token,
+        fallbackName: "project-file",
+      });
     } catch (error) {
       console.error("Download error:", error);
       showToast("Download failed");

@@ -12,12 +12,15 @@ import {
   Award,
   Clock3,
   Trash2,
-  Menu
+  Menu,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ConfirmToast from "./ConfirmToast";
 
 const API = "http://localhost:8081";
+const ITEMS_PER_PAGE = 6;
 
 const FacultyNotifications = () => {
   const navigate = useNavigate();
@@ -30,6 +33,7 @@ const FacultyNotifications = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchNotifications = useCallback(async () => {
@@ -54,6 +58,15 @@ const FacultyNotifications = () => {
   }, [token, userId, navigate, fetchNotifications]);
 
   const unreadCount = notifications.filter((item) => !item.read).length;
+  const totalPages = Math.max(1, Math.ceil(notifications.length / ITEMS_PER_PAGE));
+  const paginatedNotifications = notifications.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
 
   const deleteNotifications = async (items) => {
     setDeleting(true);
@@ -203,7 +216,7 @@ const FacultyNotifications = () => {
           ) : notifications.length === 0 ? (
             <p style={{ textAlign: "center", padding: "2rem", color: "#888" }}>No notifications yet.</p>
           ) : (
-            notifications.map((item) => (
+            paginatedNotifications.map((item) => (
                 <div
                   key={item.id}
                   className={item.read ? "notification-card" : "notification-card unread"}
@@ -226,6 +239,23 @@ const FacultyNotifications = () => {
             ))
           )}
         </div>
+        {notifications.length > ITEMS_PER_PAGE && (
+          <div className="pagination">
+            <button className="page-btn" onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}>
+              <ChevronLeft size={18} /> Previous
+            </button>
+            <div className="page-numbers">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button key={page} className={currentPage === page ? "page-number active" : "page-number"} onClick={() => setCurrentPage(page)}>
+                  {page}
+                </button>
+              ))}
+            </div>
+            <button className="page-btn" onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>
+              Next <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
       </main>
       <ConfirmToast
         open={Boolean(deleteConfirm)}

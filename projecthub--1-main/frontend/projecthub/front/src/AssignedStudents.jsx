@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./AssignedStudents.css";
 import {
   LayoutDashboard, BookOpen, BadgeCheck, Bell, LogOut, User,
-  Users, Search, Menu, Download, ChevronDown
+  Users, Search, Menu, Download, ChevronDown, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const API = "http://localhost:8081";
+const ITEMS_PER_PAGE = 8;
 
 const AssignedStudents = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const AssignedStudents = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
   const [selectedSection, setSelectedSection] = useState("All Sections");
+  const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const sectionOptions = ["All Sections", "A", "B"];
@@ -115,6 +117,16 @@ const AssignedStudents = () => {
     if (activeTab === "no-submission") return status === "no-submission";
     return true;
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchTerm, selectedDepartment, selectedSection]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredStudents.length / ITEMS_PER_PAGE));
+  const paginatedStudents = filteredStudents.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   // Counts
   const allCount = students.length;
@@ -264,11 +276,11 @@ const AssignedStudents = () => {
               {filteredStudents.length === 0 ? (
                 <tr><td colSpan="6" className="empty-row">{loading ? "Loading..." : "No students found."}</td></tr>
               ) : (
-                filteredStudents.map((student, idx) => {
+                paginatedStudents.map((student, idx) => {
                   const status = getStudentProjectStatus(student.user?.id);
                   return (
                     <tr key={student.id}>
-                      <td>{idx + 1}</td>
+                      <td>{(currentPage - 1) * ITEMS_PER_PAGE + idx + 1}</td>
                       <td>{student.user?.fullName || "-"}</td>
                       <td>{student.studentCode || "-"}</td>
                       <td>{student.department || "-"}</td>
@@ -285,6 +297,23 @@ const AssignedStudents = () => {
             </tbody>
           </table>
         </div>
+        {filteredStudents.length > ITEMS_PER_PAGE && (
+          <div className="pagination">
+            <button className="page-btn" onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}>
+              <ChevronLeft size={18} /> Previous
+            </button>
+            <div className="page-numbers">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button key={page} className={currentPage === page ? "page-number active" : "page-number"} onClick={() => setCurrentPage(page)}>
+                  {page}
+                </button>
+              ))}
+            </div>
+            <button className="page-btn" onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>
+              Next <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );

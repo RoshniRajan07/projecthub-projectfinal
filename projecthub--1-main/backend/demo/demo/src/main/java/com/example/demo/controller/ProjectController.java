@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,21 +60,19 @@ public class ProjectController {
             @PathVariable String fileName,
             @RequestParam(value = "inline", required = false) Boolean inline) {
         try {
-            Path filePath = Paths.get("uploads").toAbsolutePath().normalize().resolve(fileName);
+            String cleanFileName = StringUtils.cleanPath(fileName);
+            Path filePath = findDownloadPath(cleanFileName);
+            if (filePath == null) {
+                return ResponseEntity.notFound().build();
+            }
+
             Resource resource = new UrlResource(filePath.toUri());
 
             if (!resource.exists()) {
                 return ResponseEntity.notFound().build();
             }
 
-            String contentType = "application/octet-stream";
-            if (fileName.toLowerCase().endsWith(".pdf")) {
-                contentType = "application/pdf";
-            } else if (fileName.toLowerCase().endsWith(".png")) {
-                contentType = "image/png";
-            } else if (fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg")) {
-                contentType = "image/jpeg";
-            }
+            String contentType = getContentType(resource.getFilename());
 
             String disposition = Boolean.TRUE.equals(inline)
                     ? "inline; filename=\"" + resource.getFilename() + "\""
@@ -84,6 +85,100 @@ public class ProjectController {
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    private Path findDownloadPath(String fileName) {
+        String publicFileName = stripTimestampPrefix(fileName);
+        Path uploadPath = Paths.get("uploads").toAbsolutePath().normalize();
+        Path nestedUploadPath = Paths.get("backend", "demo", "demo", "uploads").toAbsolutePath().normalize();
+        Path rootPublicPath = Paths.get("frontend", "projecthub", "front", "public").toAbsolutePath().normalize();
+        Path backendToPublicPath = Paths.get("..", "..", "..", "frontend", "projecthub", "front", "public").toAbsolutePath().normalize();
+        Path[] candidates = new Path[] {
+                uploadPath.resolve(fileName),
+                nestedUploadPath.resolve(fileName),
+                rootPublicPath.resolve(fileName),
+                rootPublicPath.resolve(publicFileName),
+                backendToPublicPath.resolve(publicFileName)
+        };
+
+        for (Path candidate : candidates) {
+            if (Files.exists(candidate) && Files.isRegularFile(candidate)) {
+                return candidate;
+            }
+        }
+
+        Path[] searchDirectories = new Path[] {
+                uploadPath,
+                nestedUploadPath,
+                rootPublicPath,
+                backendToPublicPath
+        };
+
+        for (Path directory : searchDirectories) {
+            Path fuzzyMatch = findSimilarFile(directory, publicFileName);
+            if (fuzzyMatch != null) {
+                return fuzzyMatch;
+            }
+        }
+        return null;
+    }
+
+    private String stripTimestampPrefix(String fileName) {
+        return fileName.replaceFirst("^(\\d+_)+", "");
+    }
+
+    private Path findSimilarFile(Path directory, String requestedFileName) {
+        if (!Files.isDirectory(directory)) {
+            return null;
+        }
+
+        String requestedBase = normalizeBaseName(requestedFileName);
+        if (requestedBase.length() < 3) {
+            return null;
+        }
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
+            for (Path file : stream) {
+                if (!Files.isRegularFile(file)) {
+                    continue;
+                }
+                String candidateBase = normalizeBaseName(stripTimestampPrefix(file.getFileName().toString()));
+                if (candidateBase.contains(requestedBase) || requestedBase.contains(candidateBase)) {
+                    return file;
+                }
+            }
+        } catch (IOException ignored) {
+            return null;
+        }
+        return null;
+    }
+
+    private String normalizeBaseName(String fileName) {
+        String nameWithoutExtension = fileName.replaceFirst("\\.[^.]+$", "");
+        return nameWithoutExtension.toLowerCase().replaceAll("[^a-z0-9]+", "");
+    }
+
+    private String getContentType(String fileName) {
+        String lowerName = fileName == null ? "" : fileName.toLowerCase();
+        if (lowerName.endsWith(".pdf")) {
+            return "application/pdf";
+        }
+        if (lowerName.endsWith(".png")) {
+            return "image/png";
+        }
+        if (lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg")) {
+            return "image/jpeg";
+        }
+        if (lowerName.endsWith(".doc")) {
+            return "application/msword";
+        }
+        if (lowerName.endsWith(".docx")) {
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        }
+        if (lowerName.endsWith(".zip")) {
+            return "application/zip";
+        }
+        return "application/octet-stream";
     }
 
     // =====================================

@@ -63,7 +63,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
-  const [resetSent, setResetSent] = useState(null);
+  const [resetSent, setResetSent] = useState("");
 
   useEffect(() => {
     setEmail("");
@@ -129,7 +129,7 @@ export default function Login() {
 
   const handleForgotPassword = async () => {
     setError("");
-    setResetSent(null);
+    setResetSent("");
     const normalizedEmail = email.trim();
     const isMissingEmail = !normalizedEmail;
 
@@ -151,7 +151,7 @@ export default function Login() {
       if (isMissingEmail) {
         setError("Enter your email");
       } else {
-        setResetSent(data);
+        setResetSent(data.message || "Reset password link is sent to your email");
       }
     } catch {
       setError(isMissingEmail ? "Enter your email" : "Server not reachable. Please try again.");
@@ -247,22 +247,7 @@ export default function Login() {
           {/* ERROR MESSAGE */}
           {error && <p style={{ color: "red", fontSize: "13px", marginTop: "8px" }}>{error}</p>}
           {resetSent && (
-            <div className="reset-sent-box">
-              <strong>{resetSent.message || "Reset password link is ready"}</strong>
-              <span>{resetSent.email}</span>
-              {resetSent.resetLink && (
-                <button
-                  type="button"
-                  className="forgot-link"
-                  onClick={() => {
-                    trackAuthAction("reset_password_link_click");
-                    window.location.href = resetSent.resetLink;
-                  }}
-                >
-                  Open Reset Link
-                </button>
-              )}
-            </div>
+            <p className="reset-sent-message">{resetSent}</p>
           )}
 
           {/* LOGIN BUTTON */}
@@ -281,7 +266,7 @@ export default function Login() {
               trackAuthAction(forgotMode ? "back_to_signin_click" : "forgot_password_click");
               setForgotMode(!forgotMode);
               setError("");
-              setResetSent(null);
+              setResetSent("");
             }}
           >
             {forgotMode ? "Back to Sign In" : "Forgot password?"}

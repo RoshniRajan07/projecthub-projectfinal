@@ -143,6 +143,63 @@
   border: 1px solid #e5e7eb;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+  padding-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.page-btn,
+.page-number {
+  height: 42px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.page-number {
+  width: 42px;
+  padding: 0;
+}
+
+.page-number.active {
+  background: #d8a431;
+  border-color: #d8a431;
+  color: #ffffff;
+}
+
+.page-btn:hover:not(:disabled),
+.page-number:hover:not(.active) {
+  background: #111827;
+  border-color: #111827;
+  color: #ffffff;
+}
+
+.page-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .users-table {
   width: 100%;
   border-collapse: collapse;
@@ -256,20 +313,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 9999;
+  padding: 24px;
+  overflow-y: auto;
 }
 
 .modal {
-  width: 700px;
-  max-width: 90vw;
+  width: 780px;
+  max-width: calc(100vw - 48px);
   background: white;
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: 18px;
+  padding: 24px;
   position: relative;
   animation: modalIn 0.2s ease;
-  max-height: 90vh;
+  max-height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.25);
 }
 
 @keyframes modalIn {
@@ -304,10 +364,10 @@
 .modal-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 20px;
+  gap: 16px 24px;
   overflow-y: auto;
-  max-height: 60vh;
-  padding-right: 8px;
+  max-height: calc(100vh - 210px);
+  padding: 4px 8px 8px 0;
 }
 
 .modal-body .full-width {
@@ -328,7 +388,7 @@
 
 .modal-body input,
 .modal-body select {
-  height: 44px;
+  height: 48px;
   border: 1px solid #d1d5db;
   border-radius: 12px;
   padding: 0 14px;
@@ -379,6 +439,57 @@
 /* BULK UPLOAD MODAL */
 .bulk-modal {
   max-width: 520px;
+}
+
+.bulk-modal .modal-body {
+  grid-template-columns: 1fr;
+}
+
+.manage-users-page .modal {
+  width: 640px !important;
+  max-width: calc(100vw - 56px) !important;
+  max-height: 82vh !important;
+  border-radius: 18px !important;
+  padding: 22px 24px !important;
+}
+
+.manage-users-page .modal-body {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px 18px !important;
+  max-height: calc(82vh - 150px) !important;
+}
+
+.manage-users-page .modal-body input,
+.manage-users-page .modal-body select {
+  height: 42px !important;
+  border-radius: 11px !important;
+  font-size: 13px !important;
+}
+
+.manage-users-page .modal-header {
+  margin-bottom: 16px !important;
+}
+
+.manage-users-page .modal-header h2 {
+  font-size: 18px !important;
+}
+
+.manage-users-page .modal-footer {
+  margin-top: 14px !important;
+  padding-top: 14px !important;
+}
+
+.manage-users-page .save-btn {
+  height: 40px !important;
+  min-width: 160px !important;
+}
+
+.manage-users-page .bulk-modal {
+  width: 520px !important;
+}
+
+.manage-users-page .bulk-modal .modal-body {
+  grid-template-columns: 1fr !important;
 }
 
 .bulk-info {
@@ -455,7 +566,9 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .cancel-btn {
@@ -559,6 +672,17 @@ input:-webkit-autofill:active {
   height: 100vh !important;
   border-right: 1px solid rgba(255,255,255,0.06) !important;
   color: white !important;
+  z-index: 100 !important;
+}
+
+.manage-users-page .faculty-main,
+.manage-users-page .manage-users-main {
+  margin-left: 270px !important;
+  width: calc(100% - 270px) !important;
+  min-height: 100vh !important;
+  padding: 28px 32px !important;
+  background: #f3f4f6 !important;
+  overflow-x: hidden !important;
 }
 
 .admin-page .logo {

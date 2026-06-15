@@ -111,7 +111,7 @@ export default function ResetPassword() {
           </div>
 
           {error && <p style={{ color: "red", fontSize: "13px", marginTop: "8px" }}>{error}</p>}
-          {message && <div className="reset-sent-box"><strong>{message}</strong></div>}
+          {message && <p className="reset-sent-message">{message}</p>}
 
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? "Changing..." : "Change Password"}

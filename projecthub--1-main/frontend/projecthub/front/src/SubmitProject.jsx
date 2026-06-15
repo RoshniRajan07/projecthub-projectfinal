@@ -17,9 +17,10 @@ import {
   Menu
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import jsPDF from "jspdf";
 import ConfirmToast from "./ConfirmToast";
 import Toast from "./Toast";
+import { buildDownloadUrl, downloadUploadedFile } from "./fileDownloads";
+import { downloadProjectFeedbackReport } from "./pdfReports";
 
 const API = "http://localhost:8081";
 
@@ -52,6 +53,7 @@ export default function SubmitProject() {
   const [deleting, setDeleting] = useState(false);
   const [toast, setToast] = useState({ open: false, message: "", type: "error" });
   const showToast = (message, type = "error") => setToast({ open: true, message, type });
+  const [missingProjectFiles, setMissingProjectFiles] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [facultyList, setFacultyList] = useState([]);
   const [deadlineRules, setDeadlineRules] = useState([]);
@@ -210,6 +212,9 @@ export default function SubmitProject() {
 
   const handleViewProject = async (project) => {
     const latestProject = await getLatestProject(project.id) || project;
+    if (latestProject?.id) {
+      setMissingProjectFiles((prev) => ({ ...prev, [latestProject.id]: false }));
+    }
     setSelectedProject(latestProject);
     setViewModal(true);
   };
@@ -242,37 +247,27 @@ export default function SubmitProject() {
 
   const handleDownloadFeedback = async (project) => {
     const latestProject = await getLatestProject(project.id) || project;
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Faculty Feedback Report", 20, 20);
-    doc.setFontSize(13);
-    doc.text(`Project : ${latestProject.title}`, 20, 50);
-    doc.text(`Subject : ${latestProject.subject}`, 20, 65);
-    doc.text(`Technology : ${latestProject.technology}`, 20, 80);
-    doc.text(`Status : ${latestProject.status}`, 20, 95);
-    doc.text("Faculty Feedback", 20, 125);
-    doc.text(latestProject.feedback || "No feedback yet.", 20, 145);
-    doc.save(`${latestProject.title}_Feedback.pdf`);
+    downloadProjectFeedbackReport(latestProject);
   };
 
   const handleDownloadProjectFile = async (project) => {
     const latestProject = await getLatestProject(project.id) || project;
-    if (!latestProject.fileName) { showToast("File not found"); return; }
+    if (!latestProject.fileName && !latestProject.fileURL) { showToast("File not found"); return; }
     try {
-      const res = await fetch(`${API}/projects/download/${latestProject.fileName}`);
-      if (!res.ok) { showToast("Download failed"); return; }
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = latestProject.fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      await downloadUploadedFile({
+        apiBase: API,
+        fileName: latestProject.fileName,
+        fileUrl: latestProject.fileURL,
+        token,
+        fallbackName: "project-file",
+      });
+      setMissingProjectFiles((prev) => ({ ...prev, [latestProject.id]: false }));
     } catch (error) {
       console.error("Download error:", error);
-      showToast("Download failed");
+      if (error.status === 404) {
+        setMissingProjectFiles((prev) => ({ ...prev, [latestProject.id]: true }));
+      }
+      showToast(error.message || "Download failed");
     }
   };
 
@@ -355,7 +350,7 @@ export default function SubmitProject() {
         facultyId: faculty ? faculty.id : parseInt(selectedFaculty),
         facultyName: faculty ? faculty.fullName : "",
         fileName,
-        fileURL: `${API}/projects/download/${fileName}`,
+        fileURL: buildDownloadUrl(API, fileName),
         status: formMode === "resubmit" ? "RESUBMITTED" : "PENDING",
         submittedDate: formMode === "resubmit" ? todayISO() : editingProject?.submittedDate || todayISO(),
         updatedDate: todayISO()
@@ -675,8 +670,9 @@ export default function SubmitProject() {
                   <button
                     className="file-action-btn"
                     onClick={() => handleDownloadProjectFile(selectedProject)}
+                    disabled={missingProjectFiles[selectedProject.id]}
                   >
-                    <Download size={16} /> Download
+                    <Download size={16} /> {missingProjectFiles[selectedProject.id] ? "File missing" : "Download"}
                   </button>
                 </div>
               )}

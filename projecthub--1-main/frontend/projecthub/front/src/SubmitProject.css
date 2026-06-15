@@ -1083,6 +1083,12 @@
   flex-shrink:0;
 }
 
+.file-action-btn:disabled{
+  background:#9ca3af;
+  color:#f9fafb;
+  cursor:not-allowed;
+}
+
 /* DOWNLOAD BUTTON */
 
 .download-feedback-btn{

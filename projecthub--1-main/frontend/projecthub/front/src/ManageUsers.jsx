@@ -16,13 +16,16 @@ import {
   FileText,
   Upload,
   X,
-  Menu
+  Menu,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ConfirmToast from "./ConfirmToast";
 import { AUTH_API, BACKEND_API } from "./apiConfig";
 
 const API = BACKEND_API;
+const ITEMS_PER_PAGE = 8;
 const EMPTY_USER = { fullName: "", email: "", role: "", password: "", department: "", section: "", studentCode: "", enrollmentYear: "", facultyCode: "", joiningYear: "" };
 
 const ManageUsers = () => {
@@ -46,6 +49,7 @@ const ManageUsers = () => {
   const [bulkFile, setBulkFile] = useState(null);
   const [bulkUploading, setBulkUploading] = useState(false);
   const [bulkResult, setBulkResult] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -106,12 +110,28 @@ const ManageUsers = () => {
   }, []);
 
   const filteredUsers = users.filter((user) => {
+    const userRole = (user.role || "").toUpperCase();
+    if (userRole === "ADMIN") return false;
     const matchSearch =
       (user.fullName || "").toLowerCase().includes(search.toLowerCase()) ||
       (user.email || "").toLowerCase().includes(search.toLowerCase());
-    const matchRole = role === "All Roles" ? true : (user.role || "").toUpperCase() === role.toUpperCase();
+    const matchRole = role === "All Roles" ? true : userRole === role.toUpperCase();
     return matchSearch && matchRole;
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, role]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / ITEMS_PER_PAGE));
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
 
   const deleteUsers = async (items) => {
     setDeleting(true);
@@ -298,7 +318,7 @@ const ManageUsers = () => {
   };
 
   return (
-    <div className="faculty-page manage-users-page">
+    <div className="admin-page manage-users-page">
 
       <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
         <Menu size={24} />
@@ -379,7 +399,7 @@ const ManageUsers = () => {
             </button>
             {showDropdown && (
               <div className="dropdown-menu">
-                {["All Roles", "STUDENT", "FACULTY", "ADMIN"].map((r) => (
+                {["All Roles", "STUDENT", "FACULTY"].map((r) => (
                   <div key={r} className="dropdown-item" onClick={() => selectRoleFilter(r)}>
                     {r}
                   </div>
@@ -402,7 +422,7 @@ const ManageUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user) => (
+              {paginatedUsers.map((user) => (
                 <tr key={user.id}>
                   <td>
                     <div className="user-info">
@@ -415,27 +435,29 @@ const ManageUsers = () => {
                   <td>{((user.role || "").toUpperCase()) === "STUDENT" ? `STU-${String(user.id).padStart(3, "0")}` : ((user.role || "").toUpperCase()) === "FACULTY" ? `FAC-${String(user.id).padStart(3, "0")}` : `ADM-${String(user.id).padStart(3, "0")}`}</td>
                   <td>
                     <div className="action-cell">
-                      <Pencil size={18} className="action-icon edit" onClick={async () => {
-                        const editData = {
-                          ...user,
-                          department: user.department || "",
-                          section: user.section || "",
-                          studentCode: user.studentCode || "",
-                          enrollmentYear: user.enrollmentYear || "",
-                          facultyCode: user.facultyCode || "",
-                          joiningYear: user.joiningYear || ""
-                        };
-                        try {
-                          if (user.role === "STUDENT") {
-                            const res = await fetch(`${API}/users/student/profile/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
-                            if (res.ok) { const d = await res.json(); editData.department = d.department || ""; editData.section = d.section || ""; editData.studentCode = d.studentCode || ""; editData.enrollmentYear = d.enrollmentYear || ""; }
-                          } else if (user.role === "FACULTY") {
-                            const res = await fetch(`${API}/users/faculty/profile/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
-                            if (res.ok) { const d = await res.json(); editData.department = d.department || ""; editData.section = d.section || ""; editData.facultyCode = d.facultyCode || ""; editData.joiningYear = d.joiningYear || ""; }
-                          }
-                        } catch (e) { console.error("Load profile error:", e); }
-                        setEditUser(editData);
-                      }} />
+                      {(user.role || "").toUpperCase() !== "ADMIN" && (
+                        <Pencil size={18} className="action-icon edit" onClick={async () => {
+                          const editData = {
+                            ...user,
+                            department: user.department || "",
+                            section: user.section || "",
+                            studentCode: user.studentCode || "",
+                            enrollmentYear: user.enrollmentYear || "",
+                            facultyCode: user.facultyCode || "",
+                            joiningYear: user.joiningYear || ""
+                          };
+                          try {
+                            if (user.role === "STUDENT") {
+                              const res = await fetch(`${API}/users/student/profile/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
+                              if (res.ok) { const d = await res.json(); editData.department = d.department || ""; editData.section = d.section || ""; editData.studentCode = d.studentCode || ""; editData.enrollmentYear = d.enrollmentYear || ""; }
+                            } else if (user.role === "FACULTY") {
+                              const res = await fetch(`${API}/users/faculty/profile/${user.id}`, { headers: { Authorization: `Bearer ${token}` } });
+                              if (res.ok) { const d = await res.json(); editData.department = d.department || ""; editData.section = d.section || ""; editData.facultyCode = d.facultyCode || ""; editData.joiningYear = d.joiningYear || ""; }
+                            }
+                          } catch (e) { console.error("Load profile error:", e); }
+                          setEditUser(editData);
+                        }} />
+                      )}
                       <Trash2 size={18} className="action-icon delete" onClick={() => handleDelete(user)} />
                     </div>
                   </td>
@@ -447,6 +469,23 @@ const ManageUsers = () => {
             <p style={{ textAlign: "center", padding: "2rem", color: "#888" }}>No users found.</p>
           )}
         </div>
+        {filteredUsers.length > ITEMS_PER_PAGE && (
+          <div className="pagination">
+            <button className="page-btn" onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}>
+              <ChevronLeft size={18} /> Previous
+            </button>
+            <div className="page-numbers">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button key={page} className={currentPage === page ? "page-number active" : "page-number"} onClick={() => setCurrentPage(page)}>
+                  {page}
+                </button>
+              ))}
+            </div>
+            <button className="page-btn" onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>
+              Next <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
       </main>
 
       {/* EDIT MODAL */}
@@ -465,14 +504,6 @@ const ManageUsers = () => {
               <div className="form-group">
                 <label>Email</label>
                 <input type="text" value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value })} />
-              </div>
-              <div className="form-group">
-                <label>Role</label>
-                <select value={editUser.role} onChange={(e) => setEditUser({ ...editUser, role: e.target.value })}>
-                  <option value="STUDENT">STUDENT</option>
-                  <option value="FACULTY">FACULTY</option>
-                  <option value="ADMIN">ADMIN</option>
-                </select>
               </div>
 
               {editUser.role === "STUDENT" && (
@@ -567,7 +598,6 @@ const ManageUsers = () => {
                   <option value="">Select Role</option>
                   <option value="STUDENT">STUDENT</option>
                   <option value="FACULTY">FACULTY</option>
-                  <option value="ADMIN">ADMIN</option>
                 </select>
               </div>
 
@@ -672,7 +702,6 @@ const ManageUsers = () => {
               )}
             </div>
             <div className="modal-footer">
-              <button className="cancel-btn" onClick={closeBulkModal}>Close</button>
               <button className="save-btn" onClick={handleBulkUpload} disabled={bulkUploading || !bulkFile}>
                 {bulkUploading ? "Uploading..." : "Upload & Create Users"}
               </button>
