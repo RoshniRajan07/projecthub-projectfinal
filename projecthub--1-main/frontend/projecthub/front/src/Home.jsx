@@ -1,6 +1,7 @@
 import React from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_API } from "./apiConfig";
 
 import {
   Upload,
@@ -17,7 +18,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const trackLandingClick = (action) => {
-    fetch(`http://localhost:8081/landing/click?action=${encodeURIComponent(action)}`)
+    fetch(`${BACKEND_API}/landing/click?action=${encodeURIComponent(action)}`)
       .catch(() => {});
   };
 

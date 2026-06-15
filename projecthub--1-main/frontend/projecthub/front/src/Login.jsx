@@ -7,9 +7,9 @@ import {
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
+import { AUTH_API, BACKEND_API } from "./apiConfig";
 
 const LOGIN_ENCRYPTION_KEY = "ProjectHubLoginKey2026AESKey1234";
-const API = "http://localhost:8081";
 
 const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...bytes));
 
@@ -46,7 +46,7 @@ const getErrorMessage = (data, fallback) => {
 };
 
 const trackAuthAction = (action) => {
-  fetch(`${API}/landing/click?action=${encodeURIComponent(action)}`, {
+  fetch(`${BACKEND_API}/landing/click?action=${encodeURIComponent(action)}`, {
     method: "GET",
     keepalive: true,
   }).catch(() => {});
@@ -86,7 +86,7 @@ export default function Login() {
     setLoading(true);
     try {
       const encryptedPassword = await encryptLoginPassword(password);
-      const response = await fetch(`${API}/users/login`, {
+      const response = await fetch(`${AUTH_API}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: normalizedEmail, password: encryptedPassword }),
@@ -135,7 +135,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API}/users/forgot-password`, {
+      const response = await fetch(`${AUTH_API}/users/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: normalizedEmail }),

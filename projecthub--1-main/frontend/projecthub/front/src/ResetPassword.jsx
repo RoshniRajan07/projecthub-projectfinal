@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Login.css";
-
-const API = "http://localhost:8081";
+import { AUTH_API, BACKEND_API } from "./apiConfig";
 
 const getErrorMessage = (data, fallback) => {
   const message = data?.message || data?.error || "";
@@ -17,7 +16,7 @@ const getErrorMessage = (data, fallback) => {
 };
 
 const trackAuthAction = (action) => {
-  fetch(`${API}/landing/click?action=${encodeURIComponent(action)}`, {
+  fetch(`${BACKEND_API}/landing/click?action=${encodeURIComponent(action)}`, {
     method: "GET",
     keepalive: true,
   }).catch(() => {});
@@ -43,7 +42,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API}/users/reset-password`, {
+      const response = await fetch(`${AUTH_API}/users/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, newPassword, confirmPassword }),

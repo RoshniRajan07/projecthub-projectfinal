@@ -20,8 +20,9 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ConfirmToast from "./ConfirmToast";
+import { AUTH_API, BACKEND_API } from "./apiConfig";
 
-const API = "http://localhost:8081";
+const API = BACKEND_API;
 const EMPTY_USER = { fullName: "", email: "", role: "", password: "", department: "", section: "", studentCode: "", enrollmentYear: "", facultyCode: "", joiningYear: "" };
 
 const ManageUsers = () => {
@@ -222,7 +223,7 @@ const ManageUsers = () => {
       return;
     }
     try {
-      const res = await fetch(`${API}/auth/register`, {
+      const res = await fetch(`${AUTH_API}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
