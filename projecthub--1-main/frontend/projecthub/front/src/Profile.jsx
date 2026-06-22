@@ -20,6 +20,20 @@ import { useNavigate } from "react-router-dom";
 
 const API = "http://localhost:8081";
 
+const profileLinkFields = [
+  { key: "github", label: "GitHub", placeholder: "https://github.com/username" },
+  { key: "linkedin", label: "LinkedIn", placeholder: "https://linkedin.com/in/username" },
+  { key: "leetcode", label: "LeetCode", placeholder: "https://leetcode.com/username" },
+  { key: "hackerrank", label: "HackerRank", placeholder: "https://hackerrank.com/username" },
+  { key: "portfolio", label: "Portfolio", placeholder: "https://yourportfolio.com" },
+];
+
+const getExternalUrl = (value) => {
+  const url = value.trim();
+  if (!url) return "";
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+};
+
 const roleConfigs = {
   STUDENT: {
     subtitle: "Manage your personal details and professional profiles.",
@@ -378,23 +392,39 @@ const Profile = ({ role: roleProp }) => {
             <h2>Professional Profiles</h2>
             <p>Add your coding profile URLs for faculty review and portfolio.</p>
 
-            {["github", "linkedin", "leetcode", "hackerrank", "portfolio"].map((field) => (
-              <div className="profile-link-row" key={field}>
-                <label>
-                  {field === "github" ? "GitHub" : field === "linkedin" ? "LinkedIn" : field === "leetcode" ? "LeetCode" : field === "hackerrank" ? "HackerRank" : "Portfolio"}
-                </label>
-                <div className="profile-link-input">
-                  <input
-                    type="text"
-                    name={field}
-                    value={formData[field]}
-                    onChange={handleChange}
-                    placeholder={field === "portfolio" ? "https://yourportfolio.com" : `https://${field}.com/username`}
-                  />
-                  {field !== "portfolio" && <ExternalLink size={18} className="profile-link-icon" />}
+            {profileLinkFields.map(({ key, label, placeholder }) => {
+              const externalUrl = getExternalUrl(formData[key] || "");
+              return (
+                <div className="profile-link-row" key={key}>
+                  <label>{label}</label>
+                  <div className="profile-link-input">
+                    <input
+                      type="text"
+                      name={key}
+                      value={formData[key]}
+                      onChange={handleChange}
+                      placeholder={placeholder}
+                    />
+                    {externalUrl ? (
+                      <a
+                        className="profile-link-action"
+                        href={externalUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={`Open ${label}`}
+                        aria-label={`Open ${label}`}
+                      >
+                        <ExternalLink size={18} />
+                      </a>
+                    ) : (
+                      <span className="profile-link-action disabled" title={`Add ${label} URL`}>
+                        <ExternalLink size={18} />
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

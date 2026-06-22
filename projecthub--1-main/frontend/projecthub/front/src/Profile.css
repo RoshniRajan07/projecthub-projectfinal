@@ -433,10 +433,39 @@
   outline:none;
 }
 
-.profile-link-icon{
+.profile-link-action{
   color:#d6ad60;
 
   cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:28px;
+  height:28px;
+
+  border-radius:8px;
+
+  flex-shrink:0;
+
+  transition:0.2s;
+
+  text-decoration:none;
+}
+
+.profile-link-action:hover{
+  background:#f4ead8;
+}
+
+.profile-link-action.disabled{
+  color:#cbd5e1;
+
+  cursor:not-allowed;
+}
+
+.profile-link-action.disabled:hover{
+  background:transparent;
 }
 
 /* SAVE BUTTON */
